@@ -1,0 +1,113 @@
+C251 COMPILER V5.60.0,  mcp4725                                                            13/10/23  08:58:01  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE mcp4725
+OBJECT MODULE PLACED IN mcp4725.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE mcp4725\mcp4725.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\Ads11
+                    -10;.\iic;.\IO;.\mcp4725;.\MwPro;.\uart;.\adc12;.\User) PRINT(.\Listings\mcp4725.lst) OBJECT(mcp4725.obj) 
+
+stmt  level    source
+
+    1          #include "system.h"
+    2          #include "main.h"
+    3          #include "mcp4725.h"
+    4          #include "i2c.h"
+    5          #include "io.h"
+    6          
+    7          
+    8          void MCP4725_OutVol(BYTE addr,unsigned int voltage)
+    9          {
+   10   1              long uiVolTemp;
+   11   1              BYTE out_data = 0;
+   12   1              if(voltage > MCP4725_REF_VOL)
+   13   1              {
+   14   2                      //printf("input voltage > ref voltage\r\n");
+   15   2                      return;
+   16   2              }
+   17   1      
+   18   1              //_DINT();
+   19   1              uiVolTemp = voltage*4096l/MCP4725_REF_VOL;
+   20   1              I2C_Start(1);
+   21   1              out_data = addr<<1;
+   22   1              I2C_Write_Byte(1);
+   23   1              I2C_ReadAck(1);
+   24   1              out_data = ((uiVolTemp>>8)&0xf)|MCP4725_PD_MODE;
+   25   1              I2C_Write_Byte(1);
+   26   1              I2C_ReadAck(1);
+   27   1              out_data = uiVolTemp & 0xff;
+   28   1              I2C_Write_Byte(1);
+   29   1              I2C_ReadAck(1);
+   30   1              I2C_Stop(1);
+   31   1          //_EINT();
+   32   1      }
+   33          
+   34          
+   35          void MCP4725_OutVol2(BYTE addr,unsigned int voltage)
+   36          {
+   37   1              long uiVolTemp;
+   38   1              BYTE out_data = 0;
+   39   1              if(voltage > MCP4725_REF_VOL)
+   40   1              {
+   41   2                      //printf("input voltage > ref voltage\r\n");
+   42   2                      return;
+   43   2              }
+   44   1      
+   45   1              //_DINT();
+   46   1              uiVolTemp = voltage*4096l/MCP4725_REF_VOL;
+   47   1              I2C_Start(2);
+   48   1              out_data = addr<<1;
+   49   1              I2C_Write_Byte(2);
+   50   1              I2C_ReadAck(2);
+   51   1              out_data = ((uiVolTemp>>8)&0xf)|MCP4725_PD_MODE;
+   52   1              I2C_Write_Byte(2);
+   53   1              I2C_ReadAck(2);
+   54   1              out_data = uiVolTemp & 0xff;
+   55   1              I2C_Write_Byte(2);
+   56   1              I2C_ReadAck(2);
+   57   1              I2C_Stop(2);
+   58   1          //_EINT();
+C251 COMPILER V5.60.0,  mcp4725                                                            13/10/23  08:58:01  PAGE 2   
+
+   59   1      }
+   60          
+   61          
+   62          #if 0
+               unsigned int MCP4725_Read(unsigned char addr)
+               {
+                       unsigned int uiTemp1,uiTemp2,data;
+               
+                       I2C_Start();
+                       I2C_Write_Byte((addr<<1) | 1);
+                       I2C_Read_Byte(I2C_ACK);
+                       uiTemp1 = I2C_Read_Byte(I2C_ACK);
+                       uiTemp2 = I2C_Read_Byte(I2C_NACK);
+                       I2C_Stop();
+                       data = ((uiTemp1&0xf)<<4 |(uiTemp2>>4) ) | (uiTemp1<<4);        
+                       return data;
+               }
+               #endif
+   77          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =      1676     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =        22     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

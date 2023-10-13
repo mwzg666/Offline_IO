@@ -1,0 +1,162 @@
+C251 COMPILER V5.60.0,  MwPro                                                              13/10/23  08:58:01  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE MwPro
+OBJECT MODULE PLACED IN MwPro.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE MwPro\MwPro.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\Ads1110;.
+                    -\iic;.\IO;.\mcp4725;.\MwPro;.\uart;.\adc12;.\User) PRINT(.\Listings\MwPro.lst) OBJECT(MwPro.obj) 
+
+stmt  level    source
+
+    1          #include "MwPro.h"
+    2          
+    3          
+    4          BYTE CheckSum(BYTE *Data,BYTE len)
+    5          {
+    6   1          BYTE dwSum = 0;
+    7   1              BYTE i;
+    8   1          for (i = 0; i < len; i++)
+    9   1          {
+   10   2              dwSum += Data[i];
+   11   2          }
+   12   1      
+   13   1          return dwSum;
+   14   1      }
+   15          
+   16          BYTE BcdToHex(BYTE Bh, BYTE Bl)
+   17          {
+   18   1          BYTE temp;
+   19   1          if (Bh > 0x39)
+   20   1          {
+   21   2              temp = Bh - 0x37;
+   22   2          }
+   23   1          else
+   24   1          {
+   25   2              temp = Bh - 0x30;
+   26   2          }
+   27   1      
+   28   1          temp <<= 4;
+   29   1          temp &=0xF0;
+   30   1          
+   31   1          if (Bl > 0x39)
+   32   1          {
+   33   2              temp |= (Bl - 0x37)&0x0F;
+   34   2          }
+   35   1          else
+   36   1          {
+   37   2              temp |= (Bl - 0x30)&0x0F;
+   38   2          }
+   39   1      
+   40   1          return temp;
+   41   1      }
+   42          
+   43          
+   44          void SendCmd(BYTE Cmd, BYTE *Data, BYTE Length)
+   45          {       
+   46   1              BYTE Sum;
+   47   1          BYTE Str[3] = {0};
+   48   1              FRAME_HEAD *head;
+   49   1      
+   50   1          memset(SendBuf, 0, UART_BUFF_LENGTH);
+   51   1          head = (FRAME_HEAD*)SendBuf;
+   52   1      
+   53   1          head->Head   = HEAD;
+   54   1          head->Lenght = 8+Length;
+   55   1          head->Type   = 0x10;    // 暂时未使用
+   56   1          head->Addr   = 0xA0;    
+   57   1          head->Cmd    = Cmd;
+   58   1      
+C251 COMPILER V5.60.0,  MwPro                                                              13/10/23  08:58:01  PAGE 2   
+
+   59   1          // data
+   60   1          if (Length > 0)
+   61   1          {
+   62   2              memcpy(&SendBuf[sizeof(FRAME_HEAD)], Data, Length);
+   63   2          }
+   64   1      
+   65   1          // CS
+   66   1          Sum = CheckSum(&SendBuf[1],Length+4);
+*** WARNING C188 IN LINE 66 OF MwPro\MwPro.c: 'parameter 2': value truncated
+   67   1          sprintf((char *)Str, "%02X", Sum);
+   68   1          memcpy(&SendBuf[Length+5], Str, 2);
+   69   1      
+   70   1          SendBuf[Length+7] = TAIL;
+   71   1      
+   72   1          while(CommIdleTime < 200)
+   73   1          {
+   74   2              TimerTask();
+   75   2              HndInput();
+   76   2          }
+   77   1      
+   78   1          Uart1Send(SendBuf,head->Lenght);
+   79   1      
+   80   1          CommIdleTime = 0;
+   81   1      }
+   82          
+   83          
+   84          
+   85          BOOL ValidUartFrame()
+   86          {
+   87   1              BYTE cs;
+   88   1          BYTE rs;
+   89   1          FRAME_HEAD *pFrameHead;
+   90   1              if ((RecLength < (sizeof(FRAME_HEAD) + 3)) ||
+   91   1            (RecLength >= 255))   // 长度大于最大包长 或 小于 帧头长度
+   92   1          {
+   93   2              return FALSE;
+   94   2          }
+   95   1      
+   96   1          pFrameHead = (FRAME_HEAD *)RecvBuf;
+   97   1          if (pFrameHead->Head != HEAD)
+   98   1          {
+   99   2              return FALSE;
+  100   2          }
+  101   1      
+  102   1          if (RecvBuf[RecLength-1] != TAIL)
+  103   1          {
+  104   2              return FALSE;
+  105   2          }
+  106   1      
+  107   1          if (pFrameHead->Lenght != RecLength) // 协议数据长度 大于 实际长度
+  108   1          {
+  109   2              return FALSE;
+  110   2          }
+  111   1      
+  112   1          cs = CheckSum(&RecvBuf[1], RecLength-4);
+*** WARNING C188 IN LINE 112 OF MwPro\MwPro.c: 'parameter 2': value truncated
+  113   1          rs = BcdToHex(RecvBuf[RecLength-3], RecvBuf[RecLength-2]);
+  114   1          
+  115   1          if (cs != rs)
+  116   1          {
+  117   2              return FALSE;
+  118   2          }
+  119   1      
+  120   1          return TRUE;
+  121   1      }
+  122          
+C251 COMPILER V5.60.0,  MwPro                                                              13/10/23  08:58:01  PAGE 3   
+
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       683     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =        30     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =         8     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)
