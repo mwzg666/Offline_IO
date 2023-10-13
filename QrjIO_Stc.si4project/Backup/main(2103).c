@@ -58,6 +58,20 @@ void SysInit()
     while(!(HIRCCR & 1));
     CLKSEL = 0;              
 }
+void IoInit()
+{
+    EAXFR = 1;
+    WTST = 0;   //设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
+
+    P0M1 = 0x00;   P0M0 |= (1<<3)|(1<<4)|(1<<6) ;                     // P0.0 P0.1 P0.4 推挽输出
+    P1M1 = 0x00;   P1M0 |= (1<<4)|(1<<5);                       //设置为准双向口
+    P2M1 = 0x00;   P2M0 |= (1<<0);                      // P2.2 推挽输出
+    P3M1 = 0x00;   P3M0 |= (1<<2)|(1<<3)|(1<<4);        //设置为准双向口
+    P4M1 = 0x00;   P4M0 |= (1<<2)|(1<<3)|(1<<4);                       //设置为准双向
+    P5M1 = 0x00;   P5M0 |= (1<<0) | (1<<2);             //设置为准双向口
+    P6M1 = 0x00;   P6M0 |= (1<<7);     //设置为准双向口
+    P7M1 = 0x00;   P7M0 = 0x00;                         //设置为准双向口
+}
 
 void Timer0Init()
 {
@@ -95,10 +109,9 @@ void Output(BYTE i, BYTE x)
         case BIT_ALARM_SOUND:   ALARM_SOUND(x);   break;    // 报警声控制
         case BIT_PREA:          PREA(x);          break;    // 预警
         case BIT_ALARM:         ALARM(x);         break;    // 报警
-        case BIT_BUMP:          BUMP(x);          break;    // 泵
-        //case BIT_CHU_SHUAN:     CHU_SHUAN(x);     break;    // 除酸
-        //case BIT_CHOU_QI:       CHOU_QI(x);       break;    // 抽气
-        //case BIT_ZHOU_ZHI:      ZHOU_ZHI(x);      break;    // 走纸
+        case BIT_CHU_SHUAN:     CHU_SHUAN(x);     break;    // 除酸
+        case BIT_CHOU_QI:       CHOU_QI(x);       break;    // 抽气
+        case BIT_ZHOU_ZHI:      ZHOU_ZHI(x);      break;    // 走纸
         case BIT_FAULT:         FAULT(x);         break;    // 故障
     }
 }
@@ -202,13 +215,13 @@ void Task_1s()
     if (NeedGetFlow)
     {
         NeedGetFlow = FALSE;
-        //GetAds1110(I2C_GASFLOW1); 
+        GetAds1110(I2C_GASFLOW1); 
         g_BaseInfo.Flow1 = Voltage;
 
-        //GetAds1110(I2C_GASFLOW2); 
+        GetAds1110(I2C_GASFLOW2); 
         g_BaseInfo.Flow2 = Voltage;
 
-        //GetAds1110(I2C_PROGRESS); 
+        GetAds1110(I2C_PROGRESS); 
         g_BaseInfo.Press = Voltage;
         g_BaseInfo.Temp = Voltage;
     }
@@ -325,10 +338,9 @@ void IoCtl()
     OutCtl(out.Prea,      BIT_PREA);
     OutCtl(out.Alarm,     BIT_ALARM);
     OutCtl(out.Fault,     BIT_FAULT);
-    OutCtl(out.Bump,     BIT_BUMP);
-//    OutCtl(out.ChuShuan,  BIT_CHU_SHUAN);
-//    OutCtl(out.ChouQi ,   BIT_CHOU_QI);
-//    OutCtl(out.Bump ,     BIT_BUMP);
+    OutCtl(out.ChuShuan,  BIT_CHU_SHUAN);
+    OutCtl(out.ChouQi ,   BIT_CHOU_QI);
+     
     OutStatus &= STATUS_MASK;
     OutMode &= MODE_MASK;
 }
@@ -357,7 +369,7 @@ void GetFlow()
     NeedGetFlow = TRUE;
     SendCmd(CMD_GET_FLOW,(BYTE *)&g_BaseInfo,sizeof(BASE_INFO));
 }
-/*
+
 void CtlPaper()
 {
     memcpy(&Paper, (BYTE *)&RecvBuf[sizeof(FRAME_HEAD)], sizeof(PAGER_CTL));
@@ -372,7 +384,7 @@ void CtlPaper()
         OutCtl(0,    BIT_ZHOU_ZHI);
     }
 }
-*/
+
 
 void Out4_20ma(BYTE val)
 {
@@ -420,7 +432,7 @@ void HndUartFrame()
         case CMD_VER:      GetVer();   break;    // 软件版本
 
         case CMD_GET_FLOW:    GetFlow();    break;
-        //case CMD_CTL_PAPER:   CtlPaper();   break;
+        case CMD_CTL_PAPER:   CtlPaper();   break;
         case CMD_OUT_4_20MA:  Out4_20ma(RecvBuf[sizeof(FRAME_HEAD)]);    break;
         case CMD_GET_4_20MA:  Read4_20ma();  break;
         case CMD_OUT_4_20MA_2:Out4_20ma_2(RecvBuf[sizeof(FRAME_HEAD)]);    break;
@@ -558,7 +570,7 @@ void HndInput()
     }
 }
 */
-/*
+
 void HndPaper()
 {
     static BYTE IrHis = 0; 
@@ -589,7 +601,7 @@ void HndPaper()
         }
     }
 }
-*/
+
 
 void ReportInput()
 {
@@ -606,12 +618,12 @@ void ReportInput()
             return;
         }
 
-//        if (PaperErr)
-//        {
-//            PaperErr = FALSE;
-//            SendCmd(CMD_CTL_PAPER, (BYTE *)&ret, 1);
-//            return;
-//        }
+        if (PaperErr)
+        {
+            PaperErr = FALSE;
+            SendCmd(CMD_CTL_PAPER, (BYTE *)&ret, 1);
+            return;
+        }
     }
 }
 
@@ -668,7 +680,7 @@ int main( void )
         TimerTask();
         Uart1Hnd();
         HndInput();
-        //HndPaper();
+        HndPaper();
         ReportInput();
     }  
 }

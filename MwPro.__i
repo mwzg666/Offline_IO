@@ -1,1 +1,0 @@
-"MwPro\MwPro.c" XSMALL INTR2 OPTIMIZE (0,SPEED) BROWSE INCDIR(.\Ads1110;.\iic;.\IO;.\mcp4725;.\MwPro;.\uart;.\adc12;.\User) PRINT(.\Listings\MwPro.lst) OBJECT(MwPro.obj)

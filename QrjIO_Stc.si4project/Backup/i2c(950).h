@@ -24,7 +24,7 @@ extern BYTE P4DIR;
 #define I2C2_SDA  (1<<0)
 #define I2C2_SCL  (1<<1)
 
-#if 0
+
 #define I2C3_DIR   P9DIR
 #define I2C3_OUT   P9OUT
 #define I2C3_IN    P9IN
@@ -42,7 +42,7 @@ extern BYTE P4DIR;
 #define I2C5_IN    P8IN
 #define I2C5_SDA   BIT1 
 #define I2C5_SCL   BIT2 
-#endif
+
 
 #define I2C_HIGH 1
 #define I2C_LOW  0

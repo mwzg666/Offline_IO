@@ -606,12 +606,12 @@ void ReportInput()
             return;
         }
 
-//        if (PaperErr)
-//        {
-//            PaperErr = FALSE;
-//            SendCmd(CMD_CTL_PAPER, (BYTE *)&ret, 1);
-//            return;
-//        }
+        if (PaperErr)
+        {
+            PaperErr = FALSE;
+            SendCmd(CMD_CTL_PAPER, (BYTE *)&ret, 1);
+            return;
+        }
     }
 }
 

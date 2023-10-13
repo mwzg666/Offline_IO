@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               13/10/23  08:58:02  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -66,270 +66,679 @@ stmt  level    source
    56          {
    57   1          HIRCCR = 0x80;           // 启动内部高速IRC
    58   1          while(!(HIRCCR & 1));
-C251 COMPILER V5.60.0,  main                                                               13/10/23  08:58:02  PAGE 2   
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 2   
 
    59   1          CLKSEL = 0;              
    60   1      }
-   61          void IoInit()
-   62          {
-   63   1          EAXFR = 1;
-   64   1          WTST = 0;   //设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
-   65   1      
-   66   1          P0M1 = 0x00;   P0M0 |= (1<<3)|(1<<4)|(1<<6) ;                     // P0.0 P0.1 P0.4 推挽输出
-   67   1          P1M1 = 0x00;   P1M0 |= (1<<4)|(1<<5);                       //设置为准双向口
-   68   1          P2M1 = 0x00;   P2M0 |= (1<<0);                      // P2.2 推挽输出
-   69   1          P3M1 = 0x00;   P3M0 |= (1<<2)|(1<<3)|(1<<4);        //设置为准双向口
-   70   1          P4M1 = 0x00;   P4M0 |= (1<<2)|(1<<3)|(1<<4);                       //设置为准双向
-   71   1          P5M1 = 0x00;   P5M0 |= (1<<0) | (1<<2);             //设置为准双向口
-   72   1          P6M1 = 0x00;   P6M0 |= (1<<7);     //设置为准双向口
-   73   1          P7M1 = 0x00;   P7M0 = 0x00;                         //设置为准双向口
-   74   1      }
-   75          
-   76          void Timer0Init()
+   61          
+   62          void Timer0Init()
+   63          {
+   64   1          AUXR = 0x00;    //Timer0 set as 12T, 16 bits timer auto-reload, 
+   65   1          TH0 = (u8)(Timer0_Reload / 256);
+   66   1          TL0 = (u8)(Timer0_Reload % 256);
+   67   1          ET0 = 1;    //Timer0 interrupt enable
+   68   1          TR0 = 1;    //Tiner0 run
+   69   1          
+   70   1          // 中断优先级3
+   71   1          PT0  = 0;
+   72   1          PT0H = 0;
+   73   1      }
+   74          
+   75          // 10ms 中断一下
+   76          void Timer0Int (void) interrupt 1
    77          {
-   78   1          AUXR = 0x00;    //Timer0 set as 12T, 16 bits timer auto-reload, 
-   79   1          TH0 = (u8)(Timer0_Reload / 256);
-   80   1          TL0 = (u8)(Timer0_Reload % 256);
-   81   1          ET0 = 1;    //Timer0 interrupt enable
-   82   1          TR0 = 1;    //Tiner0 run
-   83   1          
-   84   1          // 中断优先级3
-   85   1          PT0  = 0;
-   86   1          PT0H = 0;
-   87   1      }
-   88          
-   89          // 10ms 中断一下
-   90          void Timer0Int (void) interrupt 1
-   91          {
-   92   1          Timer0Cnt ++;
-   93   1      }
-   94          
-   95          
-   96          void Output(BYTE i, BYTE x)
-   97          {
-   98   1          switch(i)
-   99   1          {
-  100   2              
-  101   2              case BIT_HOST_POWER:    HOST_POWER(x);    break;    // 工控机电源控制
-  102   2              case BIT_SYS_POWER:     SYS_POWER(x);     break;    // 工控机电源控制
-  103   2              case BIT_SEN_ONOFF:     SEN_POWER(x);     break;    // IO板电源  
-  104   2              case BIT_LED_RED:       LED_RED(x);       break;    // 指示灯(红)
-  105   2              case BIT_LED_YELLOW:    LED_YELLOW(x);    break;    // 指示灯(黄)
-  106   2              case BIT_LED_GREEN:     LED_GREEN(x);     break;    // 指示灯(绿)
-  107   2              case BIT_LIGHT_RED:     LIGHT_RED(x);     break;    // 报警灯（红）
-  108   2              case BIT_LIGHT_YELLOW:  LIGHT_YELLOW(x); break;     // 报警灯（黄）
-  109   2              case BIT_ALARM_SOUND:   ALARM_SOUND(x);   break;    // 报警声控制
-  110   2              case BIT_PREA:          PREA(x);          break;    // 预警
-  111   2              case BIT_ALARM:         ALARM(x);         break;    // 报警
-  112   2              case BIT_CHU_SHUAN:     CHU_SHUAN(x);     break;    // 除酸
-*** ERROR C67 IN LINE 112 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 112 OF User\main.c: 'BIT2': undefined identifier
-*** ERROR C67 IN LINE 112 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 112 OF User\main.c: 'BIT2': undefined identifier
-  113   2              case BIT_CHOU_QI:       CHOU_QI(x);       break;    // 抽气
-  114   2              case BIT_ZHOU_ZHI:      ZHOU_ZHI(x);      break;    // 走纸
-*** ERROR C67 IN LINE 114 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 114 OF User\main.c: 'BIT6': undefined identifier
-*** ERROR C67 IN LINE 114 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 114 OF User\main.c: 'BIT6': undefined identifier
-  115   2              case BIT_FAULT:         FAULT(x);         break;    // 故障
-  116   2          }
-C251 COMPILER V5.60.0,  main                                                               13/10/23  08:58:02  PAGE 3   
+   78   1          Timer0Cnt ++;
+   79   1      }
+   80          
+   81          
+   82          void Output(BYTE i, BYTE x)
+   83          {
+   84   1          switch(i)
+   85   1          {
+   86   2              
+   87   2              case BIT_HOST_POWER:    HOST_POWER(x);    break;    // 工控机电源控制
+   88   2              case BIT_SYS_POWER:     SYS_POWER(x);     break;    // 工控机电源控制
+   89   2              case BIT_SEN_ONOFF:     SEN_POWER(x);     break;    // IO板电源  
+   90   2              case BIT_LED_RED:       LED_RED(x);       break;    // 指示灯(红)
+   91   2              case BIT_LED_YELLOW:    LED_YELLOW(x);    break;    // 指示灯(黄)
+   92   2              case BIT_LED_GREEN:     LED_GREEN(x);     break;    // 指示灯(绿)
+   93   2              case BIT_LIGHT_RED:     LIGHT_RED(x);     break;    // 报警灯（红）
+   94   2              case BIT_LIGHT_YELLOW:  LIGHT_YELLOW(x); break;     // 报警灯（黄）
+   95   2              case BIT_ALARM_SOUND:   ALARM_SOUND(x);   break;    // 报警声控制
+   96   2              case BIT_PREA:          PREA(x);          break;    // 预警
+   97   2              case BIT_ALARM:         ALARM(x);         break;    // 报警
+   98   2              case BIT_BUMP:          BUMP(x);          break;    // 泵
+   99   2              //case BIT_CHU_SHUAN:     CHU_SHUAN(x);     break;    // 除酸
+  100   2              //case BIT_CHOU_QI:       CHOU_QI(x);       break;    // 抽气
+  101   2              //case BIT_ZHOU_ZHI:      ZHOU_ZHI(x);      break;    // 走纸
+  102   2              case BIT_FAULT:         FAULT(x);         break;    // 故障
+  103   2          }
+  104   1      }
+  105          
+  106          
+  107          // 闪烁 -- 300ms 开 300ms 关
+  108          void OutFlash(BYTE i)
+  109          {
+  110   1          //static BYTE FlashHis = 0;
+  111   1          WORD mask = 0;
+  112   1          
+  113   1          if (FlashIoTimer[i]++ > 20)   // 320ms
+  114   1          {
+  115   2              FlashIoTimer[i] = 0;
+  116   2              
+  117   2              mask = 1<<i;
+  118   2              if ((OutHis & mask) == 0)
+  119   2              {
+  120   3                  OutHis |= mask;
+  121   3                  Output(i, 1);
+  122   3              }
+  123   2              else
+  124   2              {
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 3   
 
-  117   1      }
-  118          
-  119          
-  120          // 闪烁 -- 300ms 开 300ms 关
-  121          void OutFlash(BYTE i)
-  122          {
-  123   1          //static BYTE FlashHis = 0;
-  124   1          WORD mask = 0;
-  125   1          
-  126   1          if (FlashIoTimer[i]++ > 20)   // 320ms
-  127   1          {
-  128   2              FlashIoTimer[i] = 0;
-  129   2              
-  130   2              mask = 1<<i;
-  131   2              if ((OutHis & mask) == 0)
-  132   2              {
-  133   3                  OutHis |= mask;
-  134   3                  Output(i, 1);
-  135   3              }
-  136   2              else
-  137   2              {
-  138   3                  OutHis &= ~mask;
-  139   3                  Output(i, 0);
-  140   3              }
-  141   2          }
-  142   1      }
-  143          
-  144          void OutVal(BYTE i, BYTE st)
-  145          {
-  146   1          WORD mask = 1 << i;
-  147   1          WORD his = (WORD)((OutHis >> i) & 1);
-  148   1          if (his == st)
-  149   1          {
-  150   2              return;
-  151   2          }
-  152   1      
-  153   1          if (st)
-  154   1          {
-  155   2              OutHis |= mask;
-  156   2          }
-  157   1          else
+  125   3                  OutHis &= ~mask;
+  126   3                  Output(i, 0);
+  127   3              }
+  128   2          }
+  129   1      }
+  130          
+  131          void OutVal(BYTE i, BYTE st)
+  132          {
+  133   1          WORD mask = 1 << i;
+  134   1          WORD his = (WORD)((OutHis >> i) & 1);
+  135   1          if (his == st)
+  136   1          {
+  137   2              return;
+  138   2          }
+  139   1      
+  140   1          if (st)
+  141   1          {
+  142   2              OutHis |= mask;
+  143   2          }
+  144   1          else
+  145   1          {
+  146   2              OutHis &= ~mask;
+  147   2          }
+  148   1          
+  149   1          Output(i, st);
+  150   1      }
+  151          
+  152          // Io输出控制 -- 16ms 运行一次
+  153          void OutTask(WORD delta)
+  154          {
+  155   1          BYTE i, st;
+  156   1          WORD mask;
+  157   1          for (i=0;i<16;i++)
   158   1          {
-  159   2              OutHis &= ~mask;
-  160   2          }
-  161   1          
-  162   1          Output(i, st);
-  163   1      }
-  164          
-  165          // Io输出控制 -- 16ms 运行一次
-  166          void OutTask(WORD delta)
-  167          {
-  168   1          BYTE i, st;
-  169   1          WORD mask;
-  170   1          for (i=0;i<16;i++)
-  171   1          {
-  172   2              mask = 1 << i;
-  173   2              if ((mask & STATUS_MASK) == 0)
-  174   2              {
-  175   3                  // 有些IO不能在这里控制
-  176   3                  continue;
-  177   3              }
-  178   2              
-  179   2              if ( (OutMode & (1 << i) ) != 0)    // 闪烁模式
+  159   2              mask = 1 << i;
+  160   2              if ((mask & STATUS_MASK) == 0)
+  161   2              {
+  162   3                  // 有些IO不能在这里控制
+  163   3                  continue;
+  164   3              }
+  165   2              
+  166   2              if ( (OutMode & (1 << i) ) != 0)    // 闪烁模式
+  167   2              {
+  168   3                  if ((OutStatus & (1 << i)) != 0)
+  169   3                  {
+  170   4                      // 开始闪烁
+  171   4                      OutFlash(i);
+  172   4                  }
+  173   3                  else
+  174   3                  {
+  175   4                      // 停止闪烁
+  176   4                      OutVal(i, 0);
+  177   4                  }
+  178   3              }
+  179   2              else
   180   2              {
-  181   3                  if ((OutStatus & (1 << i)) != 0)
-  182   3                  {
-C251 COMPILER V5.60.0,  main                                                               13/10/23  08:58:02  PAGE 4   
+  181   3                  st = (OutStatus & (1 << i))?1:0;
+  182   3                  OutVal(i, st);
+  183   3              }
+  184   2          }
+  185   1      }
+*** WARNING C47 IN LINE 153 OF User\main.c: 'delta': unreferenced parameter
+  186          
+  187          
+  188          void Task_1s()
+  189          {
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 4   
 
-  183   4                      // 开始闪烁
-  184   4                      OutFlash(i);
-  185   4                  }
-  186   3                  else
-  187   3                  {
-  188   4                      // 停止闪烁
-  189   4                      OutVal(i, 0);
-  190   4                  }
-  191   3              }
-  192   2              else
-  193   2              {
-  194   3                  st = (OutStatus & (1 << i))?1:0;
-  195   3                  OutVal(i, st);
-  196   3              }
-  197   2          }
-  198   1      }
-*** WARNING C47 IN LINE 166 OF User\main.c: 'delta': unreferenced parameter
-  199          
-  200          
-  201          void Task_1s()
-  202          {
-  203   1          #if 0
+  190   1          #if 0
                    static BYTE on = 1;
                    OutCtl(on,   BIT_ALARM_1);
                    on = !on;
                    #endif
-  208   1          
-  209   1          //Read4_20ma();
-  210   1          //GetFlow();
-  211   1      
-  212   1          int Voltage = 0;
-  213   1      
-  214   1          // 需要的是否才采集
-  215   1          if (NeedGetFlow)
-  216   1          {
-  217   2              NeedGetFlow = FALSE;
-  218   2              GetAds1110(I2C_GASFLOW1); 
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9DIR': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9DIR': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-C251 COMPILER V5.60.0,  main                                                               13/10/23  08:58:02  PAGE 5   
+  195   1          
+  196   1          //Read4_20ma();
+  197   1          //GetFlow();
+  198   1      
+  199   1          int Voltage = 0;
+  200   1      
+  201   1          // 需要的是否才采集
+  202   1          if (NeedGetFlow)
+  203   1          {
+  204   2              NeedGetFlow = FALSE;
+  205   2              //GetAds1110(I2C_GASFLOW1); 
+  206   2              g_BaseInfo.Flow1 = Voltage;
+  207   2      
+  208   2              //GetAds1110(I2C_GASFLOW2); 
+  209   2              g_BaseInfo.Flow2 = Voltage;
+  210   2      
+  211   2              //GetAds1110(I2C_PROGRESS); 
+  212   2              g_BaseInfo.Press = Voltage;
+  213   2              g_BaseInfo.Temp = Voltage;
+  214   2          }
+  215   1      }
+  216          
+  217          
+  218          void RunLed(WORD dt)
+  219          {
+  220   1          static WORD tm = 0;
+  221   1          tm += dt;
+  222   1          if (tm > 2500)
+  223   1          {
+  224   2              tm = 0;
+  225   2              RUN_LED(0);
+  226   2          }
+  227   1          else if (tm > 2300)
+  228   1          {
+  229   2              RUN_LED(1);
+  230   2          }
+  231   1              
+  232   1      }
+  233          
+  234          
+  235          // 定时任务
+  236          void TimerTask(void)
+  237          {
+  238   1          WORD Delta = 0;
+  239   1      
+  240   1          if (Timer0Cnt)
+  241   1          {
+  242   2              Delta = Timer0Cnt * 10;
+  243   2              Timer0Cnt = 0;
+  244   2      
+  245   2              if (RX1_Cnt > 0)
+  246   2              {
+  247   3                  Rx1_Timer += Delta;
+  248   3              }
+  249   2      
+  250   2              if (RunTime < 5000)
+  251   2              {
+  252   3                  RunTime += Delta;
+  253   3              }
+  254   2      
+  255   2              if (Paper.OnOff)
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 5   
 
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9DIR': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9IN': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9DIR': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9IN': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9DIR': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT1': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9DIR': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'BIT0': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
-*** ERROR C67 IN LINE 218 OF User\main.c: 'P9OUT': undefined identifier
+  256   2              {
+  257   3                  PaperTimer += Delta;
+  258   3              }
+  259   2      
+  260   2              Task1s += Delta;
+  261   2              if (Task1s >= 100)
+  262   2              {
+  263   3                  Task1s = 0;
+  264   3                  //if (InputReport == FALSE)
+  265   3                  //{
+  266   3                      Task_1s();
+  267   3                  //}
+  268   3              }
+  269   2      
+  270   2              if (CommIdleTime < 500)
+  271   2              {
+  272   3                  CommIdleTime += Delta;
+  273   3              } 
+  274   2              
+  275   2              OutTask(Delta);
+  276   2              RunLed(Delta);
+  277   2          }
+  278   1      }
+  279          
+  280          void OutCtl(BYTE st, BYTE i)
+  281          {
+  282   1          switch(st)
+  283   1          {
+  284   2              case 0: OutStatus &= ~(1<<i); OutMode &= ~(1<<i);  break;
+  285   2              case 1: OutStatus |= (1<<i);   OutMode &= ~(1<<i);   break;
+  286   2              case 2: OutStatus |= (1<<i);   OutMode |= (1<<i);    break;
+  287   2      
+  288   2              // 报警声特殊操作 -- 沿用原来的协议
+  289   2              case 0xAA: OutStatus |= (1<<i);   OutMode |= (1<<i);    break;   // 开启
+  290   2              case 0x55: OutStatus &= ~(1<<i); OutMode &= ~(1<<i);  break;  // 关闭
+  291   2          }
+  292   1      }
+  293          
+  294          
+  295          void LampCtl()
+  296          {
+  297   1          LED_PARAM led;
+  298   1          memcpy(&led, (BYTE *)&RecvBuf[sizeof(FRAME_HEAD)], sizeof(LED_PARAM));
+  299   1      
+  300   1          OutCtl(led.StateLed_Green,   BIT_LED_GREEN);
+  301   1          OutCtl(led.StateLed_Red,     BIT_LED_RED);
+  302   1          OutCtl(led.StateLed_Yellow, BIT_LED_YELLOW);
+  303   1          OutCtl(led.AlarmLed_RED ,    BIT_LIGHT_RED);
+  304   1          OutCtl(led.AlarmLed_Yellow, BIT_LIGHT_YELLOW);
+  305   1           
+  306   1          OutStatus &= STATUS_MASK;
+  307   1          OutMode &= MODE_MASK;
+  308   1      }
+  309          
+  310          void SndCtl()
+  311          {
+  312   1          BYTE Snd = RecvBuf[sizeof(FRAME_HEAD)];
+  313   1          
+  314   1          OutCtl(Snd, BIT_ALARM_SOUND);
+  315   1           
+  316   1          OutStatus &= STATUS_MASK;
+  317   1          OutMode &= MODE_MASK;
+  318   1      }
+  319          
+  320          void IoCtl()
+  321          {
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 6   
+
+  322   1          OUT_PARAM out;
+  323   1          memcpy(&out, (BYTE *)&RecvBuf[sizeof(FRAME_HEAD)], sizeof(OUT_PARAM));
+  324   1      
+  325   1          OutCtl(out.Prea,      BIT_PREA);
+  326   1          OutCtl(out.Alarm,     BIT_ALARM);
+  327   1          OutCtl(out.Fault,     BIT_FAULT);
+  328   1          OutCtl(out.Bump,     BIT_BUMP);
+  329   1      //    OutCtl(out.ChuShuan,  BIT_CHU_SHUAN);
+  330   1      //    OutCtl(out.ChouQi ,   BIT_CHOU_QI);
+  331   1      //    OutCtl(out.Bump ,     BIT_BUMP);
+  332   1          OutStatus &= STATUS_MASK;
+  333   1          OutMode &= MODE_MASK;
+  334   1      }
+  335          
+  336          void LedInit()
+  337          {
+  338   1         // 初始状态都为0 
+  339   1         //运行灯
+  340   1         RUN_LED(0);          // 运行灯
+  341   1         // 指示灯
+  342   1         LED_RED(0);          // 指示灯（红）
+  343   1         LED_YELLOW(0) ;      // 指示灯（黄）
+  344   1         LED_GREEN(0);        // 指示灯（绿）
+  345   1         //报警灯
+  346   1         LIGHT_RED(0) ;       // 报警灯（红）
+  347   1         LIGHT_YELLOW(0);     // 报警灯（黄）
+  348   1         ALARM_SOUND(0);      // 报警音 
+  349   1         //报警
+  350   1         PREA(0);
+  351   1         ALARM(0);
+  352   1         FAULT(0);
+  353   1      }
+  354          
+  355          void GetFlow()
+  356          {
+  357   1          NeedGetFlow = TRUE;
+  358   1          SendCmd(CMD_GET_FLOW,(BYTE *)&g_BaseInfo,sizeof(BASE_INFO));
+  359   1      }
+  360          /*
+  361          void CtlPaper()
+  362          {
+  363              memcpy(&Paper, (BYTE *)&RecvBuf[sizeof(FRAME_HEAD)], sizeof(PAGER_CTL));
+  364              if (Paper.OnOff)
+  365              {
+  366                  OutCtl(1,    BIT_ZHOU_ZHI);
+  367                  PaperTimer = 0;
+  368                  PaperPluse = 0;
+  369              }
+  370              else
+  371              {
+  372                  OutCtl(0,    BIT_ZHOU_ZHI);
+  373              }
+  374          }
+  375          */
+  376          
+  377          void Out4_20ma(BYTE val)
+  378          {
+  379   1          WORD v = (WORD)((float)val * 88.5);
+  380   1          MCP4725_OutVol(MCP4725_BL_ADDR, v);
+  381   1      }
+  382          
+  383          
+  384          void Out4_20ma_2(BYTE val)
+  385          {
+  386   1          WORD v = (WORD)((float)val * 88.5);
+  387   1          MCP4725_OutVol2(MCP4725_BL_ADDR, v);
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 7   
+
+  388   1      }
+  389          
+  390          
+  391          
+  392          BYTE Read4_20ma()
+  393          {
+  394   1          BYTE ret = 0;
+  395   1          int Voltage = 0;
+  396   1          GetAds1110(I2C_4_20MA_IN);
+  397   1      
+  398   1          ret = (BYTE)((float)Voltage/60);
+  399   1          SendCmd(CMD_GET_4_20MA, &ret, 1);
+  400   1          return ret;
+  401   1      }
+  402          
+  403          
+  404          void GetVer()
+  405          {
+  406   1          BYTE ver[8] = {0};
+  407   1          memcpy(ver, VERSION, strlen(VERSION));
+  408   1          SendCmd(CMD_VER, ver, 8);
+  409   1      }
+  410          
+  411          
+  412          void HndUartFrame()
+  413          {
+  414   1          FRAME_HEAD *pFrameHead = (FRAME_HEAD *)RecvBuf;
+  415   1          switch(pFrameHead->Cmd)
+  416   1          {
+  417   2              case CMD_LED_CTL:  LampCtl();  break;    // 报警灯控制
+  418   2              case CMD_SOUND:    SndCtl();   break;    // 报警音
+  419   2              case CMD_IO_OUT:   IoCtl();    break;          
+  420   2              case CMD_VER:      GetVer();   break;    // 软件版本
+  421   2      
+  422   2              case CMD_GET_FLOW:    GetFlow();    break;
+  423   2              //case CMD_CTL_PAPER:   CtlPaper();   break;
+  424   2              case CMD_OUT_4_20MA:  Out4_20ma(RecvBuf[sizeof(FRAME_HEAD)]);    break;
+  425   2              case CMD_GET_4_20MA:  Read4_20ma();  break;
+  426   2              case CMD_OUT_4_20MA_2:Out4_20ma_2(RecvBuf[sizeof(FRAME_HEAD)]);    break;
+  427   2          }
+  428   1      }
+  429          
+  430          void PowerOff()
+  431          {
+  432   1          RUN_LED(0);
+  433   1          HOST_POWER(0);
+  434   1          SYS_POWER(0);
+  435   1          SEN_POWER(0);
+  436   1          
+  437   1          while(1)
+  438   1          {
+  439   2              ;
+  440   2          }
+  441   1      }
+  442          /*
+  443          void PowerHnd(BYTE InVal)
+  444          {
+  445              IN_DEF in;
+  446              in.Val = InVal;
+  447          
+  448              if (RunTime >= 5000)  // 关机
+  449              {
+  450                  if (in.HostPwSt == 0)  // 工控已经关机
+  451                  {
+  452                      OutVal(BIT_HOST_POWER, OFF);   // 关闭总电源
+  453                      OutVal(BIT_SEN_ONOFF, OFF);   // IO板总电源
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 8   
+
+  454                      OutVal(BIT_SYS_POWER, OFF);   // 关闭工控机
+  455          
+  456                      PowerOff();
+  457                      //ALARM_1(0);
+  458                  }
+  459              }
+  460          }
+  461          */
+  462          BYTE GetInput()
+  463          {
+  464   1          // 当前只有一个开关机状态 P5.0
+  465   1          static BYTE his = LOCK_BIT();
+  466   1          BYTE st = ONOFF_LOCK();
+  467   1      
+  468   1          if (st != his)
+  469   1          {
+  470   2              Delay(50);
+  471   2              if ( st == ONOFF_LOCK() )
+  472   2              {
+  473   3                  his = st;
+  474   3                  return st;
+  475   3              }
+  476   2          }
+  477   1          return 0xFF;
+  478   1      }
+  479          
+  480          
+  481          void HndInput()
+  482          {
+  483   1          static BYTE  PwrHis = POWER_ON;   
+  484   1          static BYTE  StHis = 0x00;
+  485   1          
+  486   1          BYTE s;
+  487   1          
+  488   1          Input_Status = GetInput();
+  489   1          if (Input_Status != 0xFF)
+  490   1          {
+  491   2              //DebugMsg("Power Lock status \r\n");
+  492   2              s = (Input_Status ^ StHis);
+  493   2              if (s & LOCK_BIT())   // 开关机锁
+  494   2              {
+  495   3                  if (Input_Status & LOCK_BIT())
+  496   3                  {
+  497   4                      // 高电平关机
+  498   4                      PwrHis = POWER_OFF;
+  499   4                      //DebugMsg("Power Off \r\n");
+  500   4                      
+  501   4                      InputReport = 1;
+  502   4                  }
+  503   3                  else
+  504   3                  {
+  505   4                      // 低电平开机
+  506   4                      //DebugMsg("Power On \r\n");
+  507   4                      //PW_MAIN(1);
+  508   4                      PwrHis = POWER_ON;
+  509   4                      RunTime = 0;
+  510   4                  }
+  511   3              }
+  512   2              StHis = Input_Status;
+  513   2          }
+  514   1      
+  515   1      
+  516   1          // 延时关机
+  517   1          if (PwrHis == POWER_OFF)
+  518   1          {
+  519   2              if ((PC_STAUTUS() == 0) && (RunTime >= 5000))
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 9   
+
+  520   2              {
+  521   3                  RunTime = 0;
+  522   3                  //DebugMsg("Power Down \r\n");
+  523   3                  PowerOff();
+  524   3              }
+  525   2          }
+  526   1      }
+  527          
+  528          /*
+  529          void HndInput()
+  530          {
+  531              #define IO_MASK 0x33  
+  532          
+  533              static BYTE InHis = 0;
+  534              static BYTE RpHis = 0;
+  535              
+  536              BYTE InCur = GetInput();
+  537              //PowerHnd(InCur);
+  538              
+  539              if (InHis != InCur)
+  540              {
+  541                  Sleep(20);
+  542                  InCur = GetInput();
+  543                  if (InCur != InHis)
+  544                  {
+  545                      InHis = InCur;
+  546          
+  547                      InCur &= IO_MASK;
+  548                      if (RpHis != InCur)
+  549                      {
+  550                          // 状态变了才上报
+  551                          RpHis = InCur;
+  552                          InputReport = TRUE;
+  553                          InputStatus = InCur;
+  554                          //SendCmd(CMD_IO_IN, (BYTE *)&InCur, 1);
+  555                          //Sleep(10);
+  556                      }
+  557                  }
+  558              }
+  559          }
+  560          */
+  561          /*
+  562          void HndPaper()
+  563          {
+  564              static BYTE IrHis = 0; 
+  565              BYTE ir;
+  566              //BYTE ret = 1;
+  567              
+  568              if (Paper.OnOff)
+  569              {
+  570                  ir = PAPER_IR();
+  571                  if (IrHis != ir)
+  572                  {
+  573                      IrHis = ir;
+  574                      PaperPluse ++;
+  575                      PaperTimer = 0;
+  576                  }
+  577                  
+  578                  if ((PaperPluse >= Paper.Pluse) || (PaperTimer > 500))
+  579                  {
+  580                      OutCtl(0,    BIT_ZHOU_ZHI);
+  581                      Paper.OnOff = 0;
+  582                  }
+  583          
+  584                  if (PaperTimer > 500)
+  585                  {   
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 10  
+
+  586                      // 走纸失败
+  587                      PaperErr = TRUE;
+  588                      //SendCmd(CMD_CTL_PAPER, (BYTE *)&ret, 1);
+  589                  }
+  590              }
+  591          }
+  592          */
+  593          
+  594          void ReportInput()
+  595          {
+  596   1          BYTE ret = 1;
+  597   1          BYTE PwOff = POWER_OFF;
+  598   1          
+  599   1          // 通信空闲的时候才上报，不然会冲突
+  600   1          if (CommIdleTime > 200)
+  601   1          {
+  602   2              if (InputReport)
+  603   2              {
+  604   3                  InputReport = FALSE;
+  605   3                  SendCmd(CMD_IO_IN, (BYTE *)&PwOff, 1);
+  606   3                  return;
+  607   3              }
+  608   2      
+  609   2              if (PaperErr)
+  610   2              {
+  611   3                  PaperErr = FALSE;
+  612   3                  SendCmd(CMD_CTL_PAPER, (BYTE *)&ret, 1);
+  613   3                  return;
+  614   3              }
+  615   2          }
+  616   1      }
+  617          
+  618          
+  619          void ClearRevBuf()
+  620          {
+  621   1          memset(RecvBuf, 0, UART_BUFF_LENGTH);
+  622   1          RecLength = 0;
+  623   1      }
+  624          
+  625          void HndUartData()
+  626          {
+  627   1          while (ValidUartFrame())
+  628   1          {
+  629   2              HndUartFrame();
+  630   2          }
+  631   1      
+  632   1          ClearRevBuf();
+  633   1      }
+  634          
+  635          
+  636          int main( void )
+  637          {
+  638   1          SysInit();
+  639   1          
+  640   1          IoInit();
+  641   1          OutVal(BIT_HOST_POWER, ON);      //主电源
+  642   1          
+  643   1          LedInit(); 
+  644   1          RUN_LED(1);
+  645   1          
+  646   1          OutVal(BIT_SEN_ONOFF, ON);      // 上电打开IO板总电源
+  647   1          OutVal(BIT_SYS_POWER, ON);      // 上电打开工控机
+  648   1      
+  649   1          Delay(200);
+  650   1          
+  651   1          Timer0Init();
+C251 COMPILER V5.60.0,  main                                                               13/10/23  16:12:42  PAGE 11  
+
+  652   1          UART1_config();
+  653   1          ClearUart1Buf();
+  654   1      
+  655   1          Delay(200);
+  656   1          Out4_20ma(0);
+  657   1          
+  658   1          OutCtl(1, BIT_LED_GREEN);   // 上电开启运行灯
+  659   1          
+  660   1          RUN_LED(0);
+  661   1          
+  662   1          EA = 1;
+  663   1      
+  664   1          WDT_CONTR |= (1<<5) |  7;  // 启动开门狗，约8秒
+  665   1          
+  666   1          while(1)
+  667   1          {         
+  668   2              TimerTask();
+  669   2              Uart1Hnd();
+  670   2              HndInput();
+  671   2              //HndPaper();
+  672   2              ReportInput();
+  673   2          }  
+  674   1      }
+  675          
+  676          
+  677          
+  678          
+  679          
+  680          
+  681          
+  682          
+  683          
+  684          
+  685          
+  686          
+  687          
+  688          
+  689          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =      3807     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =       275     ------
+  xdata-const size     =    ------     ------
+  edata size           =       300     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =       191     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

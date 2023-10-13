@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  Uart                                                               13/10/23  08:58:02  PAGE 1   
+C251 COMPILER V5.60.0,  Uart                                                               13/10/23  16:12:42  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE Uart
@@ -66,7 +66,7 @@ stmt  level    source
    56   2              Rx1_Timer = 0;
    57   2              RX1_Buffer[RX1_Cnt] = SBUF;
    58   2              
-C251 COMPILER V5.60.0,  Uart                                                               13/10/23  08:58:02  PAGE 2   
+C251 COMPILER V5.60.0,  Uart                                                               13/10/23  16:12:42  PAGE 2   
 
    59   2              if(++RX1_Cnt >= MAX_LENGTH)   
    60   2              {
@@ -135,7 +135,7 @@ Module Information          Static   Overlayable
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =       200     ------
-C251 COMPILER V5.60.0,  Uart                                                               13/10/23  08:58:02  PAGE 3   
+C251 COMPILER V5.60.0,  Uart                                                               13/10/23  16:12:42  PAGE 3   
 
   xdata-const size     =    ------     ------
   edata size           =        11     ------
