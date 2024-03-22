@@ -45,12 +45,12 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\</OutputDirectory>
+          <OutputDirectory>.\Objects\</OutputDirectory>
           <OutputName>QrjIo_Stc</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
-          <DebugInformation>0</DebugInformation>
+          <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
@@ -264,7 +264,7 @@
             <uUch>0</uUch>
             <uFlt64>0</uFlt64>
             <Fuzzy>3</Fuzzy>
-            <Optim>0</Optim>
+            <Optim>7</Optim>
             <wLevel>2</wLevel>
             <SizSpd>1</SizSpd>
             <AcaOpt>0</AcaOpt>

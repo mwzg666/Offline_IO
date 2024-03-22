@@ -16,182 +16,29 @@ Linker/Locator:  L251.exe V4.66.93.0
 Library Manager: LIB251.exe V4.30.1.0
 Hex Converter:   OH251.exe V1.47.0.0
 CPU DLL:         S251.DLL V3.129.0.0
-Dialog DLL:      DCORE51.DLL V2.81.6.0 
+Dialog DLL:      DCORE51.DLL V2.81.6.0
+Target DLL:      STCMON251.DLL V0, 1, 0, 8
+Dialog DLL:      TCORE51.DLL V2.66.4.0
+ 
 <h2>Project:</h2>
-E:\DeskTop\MWZG\MWFile\AmendPro\QrjIo\QrjIo_Stc.uvproj
-Project File Date:  10/11/2023
+E:\DeskTop\MWZG\MWFile\AmendPro\QrjIo2\QrjIo_Stc.uvproj
+Project File Date:  12/28/2023
 
 <h2>Output:</h2>
 Rebuild target 'Target 1'
 compiling adc12.c...
 compiling ads1110.c...
-Ads1110\ads1110.c(2): error C318: can't open file 'i2c.h'
 compiling i2c.c...
 compiling io.c...
-main.h(9): error C318: can't open file 'uart.h'
-main.h(11): error C318: can't open file 'i2c.h'
-main.h(12): error C318: can't open file 'MwPro.h'
-main.h(13): error C318: can't open file 'Mcp4725.h'
-main.h(14): error C318: can't open file 'ads1110.h'
-main.h(15): error C318: can't open file 'Adc12.h'
-IO\io.c(3): error C318: can't open file 'i2c.h'
 compiling mcp4725.c...
-main.h(9): error C318: can't open file 'uart.h'
-main.h(10): error C318: can't open file 'io.h'
-main.h(11): error C318: can't open file 'i2c.h'
-main.h(12): error C318: can't open file 'MwPro.h'
-main.h(14): error C318: can't open file 'ads1110.h'
-main.h(15): error C318: can't open file 'Adc12.h'
-mcp4725\mcp4725.c(4): error C318: can't open file 'i2c.h'
-mcp4725\mcp4725.c(5): error C318: can't open file 'io.h'
-mcp4725\mcp4725.c(20): warning C140: 'I2C_Start' undefined; assuming 'extern int I2C_Start()'
-mcp4725\mcp4725.c(20): warning C95: 'I2C_Start': too many actual parameters
-mcp4725\mcp4725.c(22): warning C140: 'I2C_Write_Byte' undefined; assuming 'extern int I2C_Write_Byte()'
-mcp4725\mcp4725.c(22): warning C95: 'I2C_Write_Byte': too many actual parameters
-mcp4725\mcp4725.c(23): warning C140: 'I2C_ReadAck' undefined; assuming 'extern int I2C_ReadAck()'
-mcp4725\mcp4725.c(23): warning C95: 'I2C_ReadAck': too many actual parameters
-mcp4725\mcp4725.c(25): warning C95: 'I2C_Write_Byte': too many actual parameters
-mcp4725\mcp4725.c(26): warning C95: 'I2C_ReadAck': too many actual parameters
-mcp4725\mcp4725.c(28): warning C95: 'I2C_Write_Byte': too many actual parameters
-mcp4725\mcp4725.c(29): warning C95: 'I2C_ReadAck': too many actual parameters
-mcp4725\mcp4725.c(30): warning C140: 'I2C_Stop' undefined; assuming 'extern int I2C_Stop()'
-mcp4725\mcp4725.c(30): warning C95: 'I2C_Stop': too many actual parameters
-mcp4725\mcp4725.c(47): warning C95: 'I2C_Start': too many actual parameters
-mcp4725\mcp4725.c(49): warning C95: 'I2C_Write_Byte': too many actual parameters
-mcp4725\mcp4725.c(50): warning C95: 'I2C_ReadAck': too many actual parameters
-mcp4725\mcp4725.c(52): warning C95: 'I2C_Write_Byte': too many actual parameters
-mcp4725\mcp4725.c(53): warning C95: 'I2C_ReadAck': too many actual parameters
-mcp4725\mcp4725.c(55): warning C95: 'I2C_Write_Byte': too many actual parameters
-mcp4725\mcp4725.c(56): warning C95: 'I2C_ReadAck': too many actual parameters
-mcp4725\mcp4725.c(57): warning C95: 'I2C_Stop': too many actual parameters
 compiling MwPro.c...
-main.h(9): error C318: can't open file 'uart.h'
-main.h(10): error C318: can't open file 'io.h'
-main.h(11): error C318: can't open file 'i2c.h'
-main.h(13): error C318: can't open file 'Mcp4725.h'
-main.h(14): error C318: can't open file 'ads1110.h'
-main.h(15): error C318: can't open file 'Adc12.h'
-MwPro\MwPro.c(2): error C318: can't open file 'uart.h'
-MwPro\MwPro.c(8): error C25: syntax error near ','
-MwPro\MwPro.c(12): error C25: syntax error near 'unsigned'
-MwPro\MwPro.c(12): error C67: 'i': undefined identifier
-MwPro\MwPro.c(12): error C67: 'i': undefined identifier
-MwPro\MwPro.c(14): error C25: syntax error near 'data'
-MwPro\MwPro.c(14): error C25: syntax error near '['
-MwPro\MwPro.c(14): error C25: syntax error near ']'
-MwPro\MwPro.c(17): warning C34: 'dwSum': missing declaration specifiers
-MwPro\MwPro.c(17): warning C194: obsolete declaration: use '<type> data  dwSum'
-MwPro\MwPro.c(18): error C25: syntax error near '}'
-MwPro\MwPro.c(50): error C67: 'MAX_LENGTH': undefined identifier
-MwPro\MwPro.c(50): warning C96: 'memset': too few actual parameters
-MwPro\MwPro.c(50): warning C150: 'xdata' pointer converted to 'edata' pointer
-MwPro\MwPro.c(51): error C25: syntax error near 'FRAME_HEAD'
-MwPro\MwPro.c(53): error C25: syntax error near '->'
-MwPro\MwPro.c(54): error C25: syntax error near '->'
-MwPro\MwPro.c(55): error C25: syntax error near '->'
-MwPro\MwPro.c(56): error C25: syntax error near '->'
-MwPro\MwPro.c(56): error C7: compilation aborted
 compiling Uart.c...
-uart\uart.h(13): warning C34: 'TX1_Cnt': missing declaration specifiers
-uart\uart.h(13): error C42: 'TX1_Cnt': not in formal parameter list
-uart\uart.h(14): error C29: formal/parameter has illegal storage class
-uart\uart.h(14): error C33: 'u8': invalid storage class
-uart\uart.h(14): error C25: syntax error near 'RX1_Cnt'
-uart\uart.h(14): error C33: 'RX1_Cnt': invalid storage class
-uart\uart.h(15): error C29: formal/parameter has illegal storage class
-uart\uart.h(15): error C33: 'B_TX1_Busy': invalid storage class
-uart\uart.h(16): error C29: formal/parameter has illegal storage class
-uart\uart.h(16): error C33: 'u16': invalid storage class
-uart\uart.h(16): error C25: syntax error near 'Rx1_Timer'
-uart\uart.h(16): error C33: 'Rx1_Timer': invalid storage class
-uart\uart.h(18): error C29: formal/parameter has illegal storage class
-uart\uart.h(18): error C33: 'u8': invalid storage class
-uart\uart.h(18): error C25: syntax error near 'xdata'
-uart\uart.h(18): error C33: 'RX1_Buffer': invalid storage class
-uart\uart.h(22): error C42: 'UART1_config': not in formal parameter list
-uart\uart.h(24): error C42: 'IrDAConfig': not in formal parameter list
-uart\uart.h(26): error C25: syntax error near '*'
-uart\uart.h(26): error C42: 'Uart1Send': not in formal parameter list
-uart\uart.h(28): error C42: 'Uart1Hnd': not in formal parameter list
-uart\uart.h(30): error C42: 'ClearUart1Buf': not in formal parameter list
-main.h(10): error C318: can't open file 'io.h'
-main.h(11): error C318: can't open file 'i2c.h'
-main.h(12): error C318: can't open file 'MwPro.h'
-main.h(13): error C318: can't open file 'Mcp4725.h'
-main.h(14): error C318: can't open file 'ads1110.h'
-main.h(15): error C318: can't open file 'Adc12.h'
-main.h(51): error C29: formal/parameter has illegal storage class
-main.h(57): error C33: 'LED_STATUS': invalid storage class
-main.h(61): error C29: formal/parameter has illegal storage class
-main.h(68): error C33: 'LED_PARAM': invalid storage class
-main.h(71): error C29: formal/parameter has illegal storage class
-main.h(78): error C33: 'OUT_PARAM': invalid storage class
-main.h(80): error C29: formal/parameter has illegal storage class
-main.h(84): error C33: 'PAGER_CTL': invalid storage class
-main.h(86): error C29: formal/parameter has illegal storage class
-main.h(92): error C33: 'BASE_INFO': invalid storage class
-main.h(96): error C29: formal/parameter has illegal storage class
-main.h(96): error C33: 'RecvBuf': invalid storage class
-main.h(97): error C29: formal/parameter has illegal storage class
-main.h(97): error C33: 'SendBuf': invalid storage class
-main.h(98): error C29: formal/parameter has illegal storage class
-main.h(98): error C33: 'RecLength': invalid storage class
-main.h(103): error C42: 'Delay': not in formal parameter list
-main.h(104): error C42: 'GetFlow': not in formal parameter list
-main.h(105): error C42: 'Read4_20ma': not in formal parameter list
-main.h(106): error C42: 'Out4_20ma_2': not in formal parameter list
-main.h(108): error C42: 'HndUartData': not in formal parameter list
-main.h(109): error C42: 'OutCtl': not in formal parameter list
-main.h(110): error C42: 'HndInput': not in formal parameter list
-main.h(111): error C42: 'TimerTask': not in formal parameter list
-uart\Uart.c(3): error C318: can't open file 'io.h'
-uart\Uart.c(5): warning C34: 'u16': missing declaration specifiers
-uart\Uart.c(5): error C42: 'u16': not in formal parameter list
-uart\Uart.c(5): error C25: syntax error near 'Rx1_Timer'
-uart\Uart.c(5): error C142: illegal initialization
-uart\Uart.c(7): warning C34: 'u8': missing declaration specifiers
-uart\Uart.c(7): error C42: 'u8': not in formal parameter list
-uart\Uart.c(7): error C25: syntax error near 'TX1_Cnt'
-uart\Uart.c(7): warning C34: 'TX1_Cnt': missing declaration specifiers
-uart\Uart.c(7): error C42: 'TX1_Cnt': not in formal parameter list
-uart\Uart.c(8): warning C34: 'u8': missing declaration specifiers
-uart\Uart.c(8): error C42: 'u8': not in formal parameter list
-uart\Uart.c(8): error C25: syntax error near 'RX1_Cnt'
-uart\Uart.c(8): warning C34: 'RX1_Cnt': missing declaration specifiers
-uart\Uart.c(8): error C42: 'RX1_Cnt': not in formal parameter list
-uart\Uart.c(9): error C42: 'B_TX1_Busy': not in formal parameter list
-uart\Uart.c(11): warning C34: 'u8': missing declaration specifiers
-uart\Uart.c(11): error C42: 'u8': not in formal parameter list
-uart\Uart.c(11): error C25: syntax error near 'xdata'
-uart\Uart.c(11): warning C34: 'RX1_Buffer': missing declaration specifiers
-uart\Uart.c(11): error C42: 'RX1_Buffer': not in formal parameter list
-uart\Uart.c(14): error C42: 'UART1_config': not in formal parameter list
-uart\Uart.c(14): error C25: syntax error near '{'
-uart\Uart.c(72): error C42: 'buf': not in formal parameter list
-uart\Uart.c(72): error C42: 'u8': not in formal parameter list
-uart\Uart.c(72): error C25: syntax error near 'len'
-uart\Uart.c(72): error C42: 'len': not in formal parameter list
-uart\Uart.c(115): error C7: compilation aborted
 compiling main.c...
-main.h(9): error C318: can't open file 'uart.h'
-main.h(10): error C318: can't open file 'io.h'
-main.h(11): error C318: can't open file 'i2c.h'
-main.h(12): error C318: can't open file 'MwPro.h'
-main.h(13): error C318: can't open file 'Mcp4725.h'
-main.h(14): error C318: can't open file 'ads1110.h'
-main.h(15): error C318: can't open file 'Adc12.h'
-main.c(25): error C67: 'MAX_LENGTH': undefined identifier
-main.c(26): error C67: 'MAX_LENGTH': undefined identifier
-main.c(29): error C142: illegal initialization
-main.c(31): error C142: illegal initialization
-main.c(35): error C42: 'Error': not in formal parameter list
-main.c(35): error C25: syntax error near '{'
-main.c(426): error C142: illegal initialization
-main.c(426): error C67: 'FRAME_HEAD': undefined identifier
-main.c(426): error C25: syntax error near ')'
-main.c(701): error C7: compilation aborted
 compiling system.c...
-Target not created.
+linking...
+Program Size: data=8.1 edata+hdata=479 xdata=331 const=631 code=6769
+creating hex file from ".\Objects\QrjIo_Stc"...
+".\Objects\QrjIo_Stc" - 0 Error(s), 0 Warning(s).
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

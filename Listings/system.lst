@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  system                                                             13/10/23  16:12:43  PAGE 1   
+C251 COMPILER V5.60.0,  system                                                             22/03/24  16:09:26  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE system
-OBJECT MODULE PLACED IN system.obj
-COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE User\system.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\Ads1110;.
-                    -\iic;.\IO;.\mcp4725;.\MwPro;.\uart;.\adc12;.\User) PRINT(.\Listings\system.lst) OBJECT(system.obj) 
+OBJECT MODULE PLACED IN .\Objects\system.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE User\system.c XSMALL INTR2 BROWSE INCDIR(.\Ads1110;.\iic;.\IO;.\mcp472
+                    -5;.\MwPro;.\uart;.\adc12;.\User) DEBUG PRINT(.\Listings\system.lst) OBJECT(.\Objects\system.obj) 
 
 stmt  level    source
 

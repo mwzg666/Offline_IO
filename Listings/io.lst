@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  io                                                                 13/10/23  16:12:42  PAGE 1   
+C251 COMPILER V5.60.0,  io                                                                 22/03/24  16:09:25  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE io
-OBJECT MODULE PLACED IN io.obj
-COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE IO\io.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\Ads1110;.\iic;.
-                    -\IO;.\mcp4725;.\MwPro;.\uart;.\adc12;.\User) PRINT(.\Listings\io.lst) OBJECT(io.obj) 
+OBJECT MODULE PLACED IN .\Objects\io.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE IO\io.c XSMALL INTR2 BROWSE INCDIR(.\Ads1110;.\iic;.\IO;.\mcp4725;.\Mw
+                    -Pro;.\uart;.\adc12;.\User) DEBUG PRINT(.\Listings\io.lst) OBJECT(.\Objects\io.obj) 
 
 stmt  level    source
 
@@ -16,23 +16,21 @@ stmt  level    source
     6   1          EAXFR = 1;
     7   1          WTST = 0;   //设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
     8   1      
-    9   1          P0M1 = 0x00;   P0M0 |= (1<<3)|(1<<4)|(1<<6) ;                     // P0.0 P0.1 P0.4 推挽输出
-   10   1          P1M1 = 0x00;   P1M0 |= (1<<4)|(1<<5);                       //设置为准双向口
-   11   1          P2M1 = 0x00;   P2M0 |= (1<<0);                      // P2.2 推挽输出
-   12   1          P3M1 = 0x00;   P3M0 |= (1<<2)|(1<<3)|(1<<4);        //设置为准双向口
-   13   1          P4M1 = 0x00;   P4M0 |= (1<<2)|(1<<3)|(1<<4);                       //设置为准双向
-   14   1          P5M1 = 0x00;   P5M0 |= (1<<0) | (1<<2);             //设置为准双向口
-   15   1          P6M1 = 0x00;   P6M0 |= (1<<7);     //设置为准双向口
-   16   1          P7M1 = 0x00;   P7M0 = 0x00;                         //设置为准双向口
-   17   1      }
+    9   1          P0M1 = 0x00;   P0M0 |= (1<<1)|(1<<2)|(1<<5) ;       //P0.0 P0.1 P0.4 推挽输出
+   10   1          P1M1 = 0x00;   P1M0 |= (1<<4)|(1<<5);               //设置为准双向口
+   11   1          P2M1 = 0x00;   P2M0 |= (1<<0);                      //P2.2 推挽输出
+   12   1          P3M1 = 0x00;   P3M0 = 0x00;        //设置为准双向口
+   13   1          P4M1 = 0x00;   P4M0 |= (1<<2)|(1<<3)|(1<<4);        //设置为准双向
+   14   1          P5M1 = 0x00;   P5M0 |= (1<<2)|(1<<3);             //设置为准双向口
+   15   1      }
+   16          
+   17          
    18          
-   19          
-   20          
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =        56     ------
+  code size            =        43     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------

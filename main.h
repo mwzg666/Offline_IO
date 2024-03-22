@@ -28,20 +28,24 @@
 #define POWER_ON               0xAA
 #define POWER_OFF              0x55
 
-#define VERSION  "2.1.4"
+#define VERSION  "1.0.0"
+//#define DEV_FIXED         //固定式气溶胶
+#define DEV_OFFLINE_LOW     //离线低放
 
-//#define QRJCTL
-
-#define CMD_GET_FLOW       0x01     // 获取2个流量和压差
+#define CMD_GET_FLOW       0x01     // 获取2个流量和压差 
+#ifdef DEV_FIXED
 #define CMD_CTL_PAPER      0x02     // 控制走纸
+#endif
 #define CMD_OUT_4_20MA     0x03     // 4_20MA 输出控制
 #define CMD_GET_4_20MA     0x04     // 读4_20MA 输入
 #define CMD_OUT_4_20MA_2   0x05     // 4_20MA 输出控制2
 
 
+
+
 #define CMD_LED_CTL    'Y'   // 报警灯控制
 #define CMD_SOUND      'A'   // 报警音
-#define CMD_IO_OUT     'C'   // 开关量输出      
+#define CMD_IO_OUT     'C'   // IO口开关量输出      
 #define CMD_VER        'V'   // 软件版本
 #define CMD_IO_IN      'B'   // 输入状态
 
@@ -53,6 +57,13 @@ typedef enum
     LED_ON,          // 打开
     LED_FLASH        // 闪烁
 }LED_STATUS;
+
+
+typedef enum
+{
+    STOP_OK = 1,        // 急停
+    ALARMCFM_OK         // 报警确认
+}KEY_STATUS;
 
 
 #pragma pack(1)
@@ -68,11 +79,14 @@ typedef struct
 
 typedef struct
 {
+    #ifdef DEV_OFFLINE_LOW
     char Prea;           //  预警
     char Alarm;          //  报警
     char Fault;          //  故障
     char Bump;           //  泵
-    #ifdef QRJCTL
+    #endif
+    
+    #ifdef DEV_FIXED
     char Alarm1;
     char Alarm2;
     char Alarm3;
@@ -104,6 +118,7 @@ extern WORD  CommIdleTime;
 
 
 
+void Error(void);
 
 void Delay(WORD ms);
 void GetFlow();
@@ -114,6 +129,8 @@ void HndUartData();
 void OutCtl(BYTE st, BYTE i);
 void HndInput();
 void TimerTask(void);
+void OutVal(BYTE i, BYTE st);
+
 
 
 #ifdef __cplusplus

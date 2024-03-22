@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  mcp4725                                                            13/10/23  16:12:42  PAGE 1   
+C251 COMPILER V5.60.0,  mcp4725                                                            22/03/24  16:09:26  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE mcp4725
-OBJECT MODULE PLACED IN mcp4725.obj
-COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE mcp4725\mcp4725.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\Ads11
-                    -10;.\iic;.\IO;.\mcp4725;.\MwPro;.\uart;.\adc12;.\User) PRINT(.\Listings\mcp4725.lst) OBJECT(mcp4725.obj) 
+OBJECT MODULE PLACED IN .\Objects\mcp4725.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE mcp4725\mcp4725.c XSMALL INTR2 BROWSE INCDIR(.\Ads1110;.\iic;.\IO;.\mc
+                    -p4725;.\MwPro;.\uart;.\adc12;.\User) DEBUG PRINT(.\Listings\mcp4725.lst) OBJECT(.\Objects\mcp4725.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    56   1              I2C_ReadAck(2);
    57   1              I2C_Stop(2);
    58   1          //_EINT();
-C251 COMPILER V5.60.0,  mcp4725                                                            13/10/23  16:12:42  PAGE 2   
+C251 COMPILER V5.60.0,  mcp4725                                                            22/03/24  16:09:26  PAGE 2   
 
    59   1      }
    60          
@@ -91,14 +91,14 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      1676     ------
+  code size            =      1068     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------
-  edata size           =        22     ------
+  edata size           =    ------          8
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------

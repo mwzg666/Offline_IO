@@ -4,7 +4,7 @@
 #define Baudrate   115200UL
 #define Baudrate3   9600UL
 
-#define MAX_LENGTH   200
+#define MAX_LENGTH   128
 
 extern u8  TX1_Cnt;    //发送计数
 extern u8  RX1_Cnt;    //接收计数
@@ -19,7 +19,7 @@ void UART1_config();
 
 void IrDAConfig(long int InputFreq,long int BaudRate);
 
-void Uart1Send(u8 *buf, u8 len);
+void Uart1Send(u8 *buf, int len);
 
 void Uart1Hnd();
 

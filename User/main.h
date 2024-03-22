@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <string.h>
-
 #include "system.h"
 
 #include "uart.h"
@@ -14,9 +13,6 @@
 #include "ads1110.h"
 #include "Adc12.h"
 
-#ifdef __cplusplus
-extern "C"{
-#endif
 
 
 #define MAIN_Fosc        11059200UL    // 11.0592M
@@ -33,6 +29,7 @@ extern "C"{
 
 #define VERSION  "2.1.4"
 
+//#define QRJCTL
 
 #define CMD_GET_FLOW       0x01     // 获取2个流量和压差
 #define CMD_CTL_PAPER      0x02     // 控制走纸
@@ -73,8 +70,14 @@ typedef struct
     char Prea;           //  预警
     char Alarm;          //  报警
     char Fault;          //  故障
+    char Bump;           //  泵
+    #ifdef QRJCTL
+    char Alarm1;
+    char Alarm2;
+    char Alarm3;
     char ChuShuan;       //  除酸
     char ChouQi;         //  抽气
+    #endif
 }OUT_PARAM;
 
 typedef struct
@@ -93,9 +96,10 @@ typedef struct
 
 #pragma pack()
 
-extern BYTE xdata RecvBuf[];
-extern BYTE xdata SendBuf[];
+extern BYTE xdata RecvBuf[UART_BUFF_LENGTH];
+extern BYTE  SendBuf[UART_BUFF_LENGTH];
 extern BYTE RecLength;
+extern WORD  CommIdleTime;
 
 
 

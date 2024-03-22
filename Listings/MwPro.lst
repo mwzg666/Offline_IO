@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  MwPro                                                              13/10/23  16:12:42  PAGE 1   
+C251 COMPILER V5.60.0,  MwPro                                                              22/03/24  16:09:26  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE MwPro
-OBJECT MODULE PLACED IN MwPro.obj
-COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE MwPro\MwPro.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\Ads1110;.
-                    -\iic;.\IO;.\mcp4725;.\MwPro;.\uart;.\adc12;.\User) PRINT(.\Listings\MwPro.lst) OBJECT(MwPro.obj) 
+OBJECT MODULE PLACED IN .\Objects\MwPro.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE MwPro\MwPro.c XSMALL INTR2 BROWSE INCDIR(.\Ads1110;.\iic;.\IO;.\mcp472
+                    -5;.\MwPro;.\uart;.\adc12;.\User) DEBUG PRINT(.\Listings\MwPro.lst) OBJECT(.\Objects\MwPro.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    56   1          head->Addr   = 0xA0;    
    57   1          head->Cmd    = Cmd;
    58   1      
-C251 COMPILER V5.60.0,  MwPro                                                              13/10/23  16:12:42  PAGE 2   
+C251 COMPILER V5.60.0,  MwPro                                                              22/03/24  16:09:26  PAGE 2   
 
    59   1          // data
    60   1          if (Length > 0)
@@ -75,8 +75,7 @@ stmt  level    source
    63   2          }
    64   1      
    65   1          // CS
-   66   1          Sum = CheckSum(&SendBuf[1],Length+4);
-*** WARNING C188 IN LINE 66 OF MwPro\MwPro.c: 'parameter 2': value truncated
+   66   1          Sum = CheckSum(&SendBuf[1],(BYTE)(Length+4));
    67   1          sprintf((char *)Str, "%02X", Sum);
    68   1          memcpy(&SendBuf[Length+5], Str, 2);
    69   1      
@@ -122,8 +121,7 @@ stmt  level    source
   109   2              return FALSE;
   110   2          }
   111   1      
-  112   1          cs = CheckSum(&RecvBuf[1], RecLength-4);
-*** WARNING C188 IN LINE 112 OF MwPro\MwPro.c: 'parameter 2': value truncated
+  112   1          cs = CheckSum(&RecvBuf[1], (BYTE)(RecLength-4));
   113   1          rs = BcdToHex(RecvBuf[RecLength-3], RecvBuf[RecLength-2]);
   114   1          
   115   1          if (cs != rs)
@@ -134,20 +132,20 @@ stmt  level    source
   120   1          return TRUE;
   121   1      }
   122          
-C251 COMPILER V5.60.0,  MwPro                                                              13/10/23  16:12:42  PAGE 3   
 
 
+C251 COMPILER V5.60.0,  MwPro                                                              22/03/24  16:09:26  PAGE 3   
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       683     ------
+  code size            =       454     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------
-  edata size           =        30     ------
+  edata size           =    ------         11
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------
@@ -159,4 +157,4 @@ Module Information          Static   Overlayable
 End of Module Information.
 
 
-C251 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

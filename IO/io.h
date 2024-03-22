@@ -39,15 +39,14 @@
 #define BIT_LIGHT_RED     6
 #define BIT_LIGHT_YELLOW   7
 #define BIT_ALARM_SOUND    8
-#define BIT_BUMP         9   
 
-
-#define BIT_PREA        10
-#define BIT_ALARM       11
+#define BIT_PREA        9
+#define BIT_ALARM       10
+#define BIT_BUMP        11   
 #define BIT_FAULT       12
 
 
-#ifdef QRJCTL
+#ifdef DEV_FIXED
 #define BIT_ALARM_1     13
 #define BIT_ALARM_2     14
 #define BIT_CHU_SHUAN   15
@@ -68,7 +67,7 @@
 #define LED_GREEN(x)     (x)?(P4 |= (1<<3)):(P4 &= ~(1<<3))     // 指示灯(绿)
 #define LIGHT_RED(x)     (x)?(P1 |= (1<<4)):(P1 &= ~(1<<4))     // 报警灯（红）
 #define LIGHT_YELLOW(x)  (x)?(P1 |= (1<<5)):(P1 &= ~(1<<5))     // 报警灯（黄）
-#define ALARM_SOUND(x)   (x)?(P4 |= (1<<2)):(P2 &= ~(1<<2))   // 报警声控制
+#define ALARM_SOUND(x)   (x)?(P4 |= (1<<2)):(P4 &= ~(1<<2))   // 报警声控制
 
 #define VALVE(x)   (x)?(P0 |=(1<<1)):(P0 &= ~(1<<1))       //电磁阀控制
 
@@ -78,7 +77,7 @@
 
 #define BUMP(x)      (x)?(P0 |= (1<<2)):(P0 &= ~(1<<2))      // 泵
 
-#define STOP_M(x)   (P0 & (1<<0))                           //急停控制
+#define STOP_M()   (P0 & (1<<0))                           //急停控制
 
 #define PC_STAUTUS()  (P1 & (1<<3))       // 工控机5V监测
 #define ALARM_CFM()   (P4 & (1<<1))      // 报警确认
@@ -86,14 +85,12 @@
 
 #define LOCK_BIT()  (1<<0)
 
-#ifdef QRJCTL
-
+#ifdef DEV_FIXED
 #define RS485_EN(x)      (x)?(P4OUT  |= BIT5):(P4OUT  &= ~BIT5) 
 
 #define ALARM_1(x)      (x)?(P7OUT  |= BIT4):(P7OUT  &= ~BIT4)   // 一级报警
 #define ALARM_2(x)      (x)?(P7OUT  |= BIT5):(P7OUT  &= ~BIT5)   // 二级报警
 #define ALARM_3(x)      (x)?(P7OUT  |= BIT6):(P7OUT  &= ~BIT6)   // 过载报警
-
 
 #define CHU_SHUAN(x)    (x)?(P9OUT  |= BIT2):(P9OUT  &= ~BIT2)  // 除酸
 #define CHOU_QI(x)      (x)?(P0 |= (1<<2)):(P0 &= ~(1<<2))      // 抽气
@@ -118,21 +115,34 @@ typedef union
     };
 }OUT_DEF;
 
+typedef struct
+{
+    BYTE OnOffLock:1;
+    BYTE AlamCfm:1;
+    BYTE Res1:1;
+    BYTE Res2:1;
+    BYTE Input1:1;
+    BYTE Input2:1;
+    BYTE Res3:1;
+    BYTE HostPwSt:1; 
+}IOTEST;
+
 
 typedef union
 {
     BYTE Val;
-    struct
-    {
-        BYTE OnOffLock:1;
-        BYTE AlamCfm:1;
-        BYTE Res1:1;
-        BYTE Res2:1;
-        BYTE Input1:1;
-        BYTE Input2:1;
-        BYTE Res3:1;
-        BYTE HostPwSt:1; 
-    };
+//    struct
+//    {
+//        BYTE OnOffLock:1;
+//        BYTE AlamCfm:1;
+//        BYTE Res1:1;
+//        BYTE Res2:1;
+//        BYTE Input1:1;
+//        BYTE Input2:1;
+//        BYTE Res3:1;
+//        BYTE HostPwSt:1; 
+//    };
+    IOTEST IoBit;
 }IN_DEF;
 
 void IoInit();

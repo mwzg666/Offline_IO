@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  ads1110                                                            13/10/23  16:12:42  PAGE 1   
+C251 COMPILER V5.60.0,  ads1110                                                            22/03/24  16:09:25  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE ads1110
-OBJECT MODULE PLACED IN ads1110.obj
-COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE Ads1110\ads1110.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\Ads11
-                    -10;.\iic;.\IO;.\mcp4725;.\MwPro;.\uart;.\adc12;.\User) PRINT(.\Listings\ads1110.lst) OBJECT(ads1110.obj) 
+OBJECT MODULE PLACED IN .\Objects\ads1110.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE Ads1110\ads1110.c XSMALL INTR2 BROWSE INCDIR(.\Ads1110;.\iic;.\IO;.\mc
+                    -p4725;.\MwPro;.\uart;.\adc12;.\User) DEBUG PRINT(.\Listings\ads1110.lst) OBJECT(.\Objects\ads1110.obj) 
 
 stmt  level    source
 
@@ -68,7 +68,7 @@ Module Information          Static   Overlayable
   hconst size          =    ------     ------
 End of Module Information.
 
-C251 COMPILER V5.60.0,  ads1110                                                            13/10/23  16:12:42  PAGE 2   
+C251 COMPILER V5.60.0,  ads1110                                                            22/03/24  16:09:25  PAGE 2   
 
 
 C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  Uart                                                               13/10/23  16:12:42  PAGE 1   
+C251 COMPILER V5.60.0,  Uart                                                               22/03/24  16:09:26  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE Uart
-OBJECT MODULE PLACED IN Uart.obj
-COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE uart\Uart.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\Ads1110;.\i
-                    -ic;.\IO;.\mcp4725;.\MwPro;.\uart;.\adc12;.\User) PRINT(.\Listings\Uart.lst) OBJECT(Uart.obj) 
+OBJECT MODULE PLACED IN .\Objects\Uart.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE uart\Uart.c XSMALL INTR2 BROWSE INCDIR(.\Ads1110;.\iic;.\IO;.\mcp4725;
+                    -.\MwPro;.\uart;.\adc12;.\User) DEBUG PRINT(.\Listings\Uart.lst) OBJECT(.\Objects\Uart.obj) 
 
 stmt  level    source
 
@@ -15,10 +15,10 @@ stmt  level    source
     5          u16 Rx1_Timer  = 0;
     6          
     7          u8  TX1_Cnt;    //发送计数
-    8          u8  RX1_Cnt;    //接收计数
+    8          u8  RX1_Cnt = 0;    //接收计数
     9          bit B_TX1_Busy; //发送忙标志
    10          
-   11          u8 xdata RX1_Buffer[MAX_LENGTH]; //接收缓冲
+   11          u8 xdata RX1_Buffer[MAX_LENGTH] = {0}; //接收缓冲
    12          
    13          void UART1_config()
    14          {
@@ -29,8 +29,8 @@ stmt  level    source
    19   2              AUXR |=  (1<<6);    //Timer1 set as 1T mode
    20   2              TMOD &= ~(1<<6);    //Timer1 set As Timer
    21   2              TMOD &= ~0x30;      //Timer1_16bitAutoReload;
-   22   2              TH1 = (u8)((65536UL - (MAIN_Fosc / 4) / Baudrate) / 256);
-   23   2              TL1 = (u8)((65536UL - (MAIN_Fosc / 4) / Baudrate) % 256);
+   22   2              TH1 = (u8)((65536UL - (MAIN_Fosc / 4) / Baudrate3) / 256);
+   23   2              TL1 = (u8)((65536UL - (MAIN_Fosc / 4) / Baudrate3) % 256);
    24   2              ET1 = 0;    //禁止中断
    25   2              INTCLKO &= ~0x02;  //不输出时钟
    26   2              TR1  = 1;
@@ -42,8 +42,8 @@ stmt  level    source
    32   1      
    33   1          SCON = (SCON & 0x3f) | 0x40; 
    34   1      
-   35   1          PS  = 0;    //中断高优先级
-   36   1          PSH = 0;
+   35   1      //    PS  = 0;    //中断高优先级
+   36   1      //    PSH = 0;
    37   1          //PS  = 1;    //高优先级中断
    38   1          ES  = 1;    //允许中断
    39   1          REN = 1;    //允许接收
@@ -51,7 +51,7 @@ stmt  level    source
    41   1          //UART1 switch to, 0x00: P3.0 P3.1, 0x40: P3.6 P3.7, 
    42   1          //                 0x80: P1.6 P1.7, 0xC0: P4.3 P4.4
    43   1          P_SW1 &= 0x3f;
-   44   1          P_SW1 |= 0x00;  
+   44   1          P_SW1 |= 0x40;  
    45   1          
    46   1          B_TX1_Busy = 0;
    47   1          TX1_Cnt = 0;
@@ -66,7 +66,7 @@ stmt  level    source
    56   2              Rx1_Timer = 0;
    57   2              RX1_Buffer[RX1_Cnt] = SBUF;
    58   2              
-C251 COMPILER V5.60.0,  Uart                                                               13/10/23  16:12:42  PAGE 2   
+C251 COMPILER V5.60.0,  Uart                                                               22/03/24  16:09:26  PAGE 2   
 
    59   2              if(++RX1_Cnt >= MAX_LENGTH)   
    60   2              {
@@ -81,9 +81,9 @@ stmt  level    source
    69   2          }
    70   1      }
    71          
-   72          void Uart1Send(u8 *buf, u8 len)
+   72          void Uart1Send(u8 *buf, int len)
    73          {
-   74   1          u8 i;
+   74   1          int i;
    75   1          for (i=0;i<len;i++)     
    76   1          {
    77   2              SBUF = buf[i];
@@ -97,48 +97,47 @@ stmt  level    source
    85   1          if (Rx1_Timer > 20)
    86   1          {
    87   2              Rx1_Timer = 0;
-   88   2      
+   88   2              
    89   2              memcpy(RecvBuf,RX1_Buffer, RX1_Cnt);
    90   2              RecLength = RX1_Cnt;
-   91   2              ClearUart1Buf();
-   92   2              
-   93   2              HndUartData();
-   94   2          }
-   95   1      }
+   91   2              HndUartData(); 
+   92   2              ClearUart1Buf();
+   93   2          }
+   94   1      }
+   95          
    96          
-   97          
-   98          //重定向Printf
-   99          char putchar(char c )
-  100          {
-  101   1          SBUF = c;
-  102   1          while(!TI);
-  103   1          TI = 0;
-  104   1          return c;
-  105   1      }
-  106          
-  107          void ClearUart1Buf()
-  108          {
-  109   1          memset(RX1_Buffer,0,MAX_LENGTH);
-  110   1          RX1_Cnt = 0;
-  111   1      }
+   97          //重定向Printf
+   98          char putchar(char c )
+   99          {
+  100   1          SBUF = c;
+  101   1          while(!TI);
+  102   1          TI = 0;
+  103   1          return c;
+  104   1      }
+  105          
+  106          void ClearUart1Buf()
+  107          {
+  108   1          memset(RX1_Buffer,0,MAX_LENGTH);
+  109   1          RX1_Cnt = 0;
+  110   1      }
+  111          
   112          
   113          
   114          
-  115          
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       334     ------
+  code size            =       255     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =       200     ------
-C251 COMPILER V5.60.0,  Uart                                                               13/10/23  16:12:42  PAGE 3   
-
+  xdata size           =       128     ------
   xdata-const size     =    ------     ------
-  edata size           =        11     ------
+C251 COMPILER V5.60.0,  Uart                                                               22/03/24  16:09:26  PAGE 3   
+
+  edata size           =         4     ------
   bit size             =         1     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------
@@ -146,7 +145,7 @@ Module Information          Static   Overlayable
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =         6     ------
+  hconst size          =       144     ------
 End of Module Information.
 
 

@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  adc12                                                              13/10/23  16:12:42  PAGE 1   
+C251 COMPILER V5.60.0,  adc12                                                              22/03/24  16:09:25  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE adc12
-OBJECT MODULE PLACED IN adc12.obj
-COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE adc12\adc12.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\Ads1110;.
-                    -\iic;.\IO;.\mcp4725;.\MwPro;.\uart;.\adc12;.\User) PRINT(.\Listings\adc12.lst) OBJECT(adc12.obj) 
+OBJECT MODULE PLACED IN .\Objects\adc12.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE adc12\adc12.c XSMALL INTR2 BROWSE INCDIR(.\Ads1110;.\iic;.\IO;.\mcp472
+                    -5;.\MwPro;.\uart;.\adc12;.\User) DEBUG PRINT(.\Listings\adc12.lst) OBJECT(.\Objects\adc12.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
                
                float GetVlotValu()
                {
-C251 COMPILER V5.60.0,  adc12                                                              13/10/23  16:12:42  PAGE 2   
+C251 COMPILER V5.60.0,  adc12                                                              22/03/24  16:09:25  PAGE 2   
 
                    //#define DEBUG_BAT//测试
                    #define K_BAT 0.00531
@@ -134,7 +134,7 @@ stmt  level    source
                {
                    if (index < REMOVE_CNT)
                    {
-C251 COMPILER V5.60.0,  adc12                                                              13/10/23  16:12:42  PAGE 3   
+C251 COMPILER V5.60.0,  adc12                                                              22/03/24  16:09:25  PAGE 3   
 
                        // 去掉前面n次转换数据
                        hv_result = ADC12MEM0;                 // Move results, IFG is cleared
