@@ -174,16 +174,12 @@ void Bump_ONOFF(BYTE x)
 BYTE Key_Scan(void)
 {
     static BYTE keyVal = 0;
-    if((STOP_M() == 0) || (ALARM_CFM() == 0))
+    if(STOP_M() == 0)
     {
         Delay(10);
         if(STOP_M() == 0)
         {
             keyVal = STOP_OK;
-        }
-        if(ALARM_CFM() == 0)
-        {
-            keyVal = ALARMCFM_OK;
         }
     }
     else
@@ -615,11 +611,22 @@ BYTE GetInput()
 void HndInput()
 {
     #define IO_MASK 0x33  
-
+    BYTE key = 0;
+    BYTE InCur;
     static BYTE InHis = 0;
     static BYTE RpHis = 0;
+    key = Key_Scan();
+    switch(key)
+    {
+        case STOP_OK:  
+        {
+            //OutVal(BIT_BUMP,OFF);  
+            OutCtl(0, BIT_BUMP);
+            break;
+        }
+    }
     
-    BYTE InCur = GetInput();
+    InCur = GetInput();
     PowerHnd(InCur);
     
     if (InHis != InCur)

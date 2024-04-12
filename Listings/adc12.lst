@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  adc12                                                              22/03/24  16:09:25  PAGE 1   
+C251 COMPILER V5.60.0,  adc12                                                              12/04/24  10:49:10  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE adc12
@@ -66,7 +66,7 @@ stmt  level    source
                
                float GetVlotValu()
                {
-C251 COMPILER V5.60.0,  adc12                                                              22/03/24  16:09:25  PAGE 2   
+C251 COMPILER V5.60.0,  adc12                                                              12/04/24  10:49:10  PAGE 2   
 
                    //#define DEBUG_BAT//测试
                    #define K_BAT 0.00531
@@ -134,7 +134,7 @@ stmt  level    source
                {
                    if (index < REMOVE_CNT)
                    {
-C251 COMPILER V5.60.0,  adc12                                                              22/03/24  16:09:25  PAGE 3   
+C251 COMPILER V5.60.0,  adc12                                                              12/04/24  10:49:10  PAGE 3   
 
                        // 去掉前面n次转换数据
                        hv_result = ADC12MEM0;                 // Move results, IFG is cleared
