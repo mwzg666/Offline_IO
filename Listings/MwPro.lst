@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  MwPro                                                              12/04/24  10:49:11  PAGE 1   
+C251 COMPILER V5.60.0,  MwPro                                                              07/05/24  18:43:57  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE MwPro
@@ -14,7 +14,7 @@ stmt  level    source
     4          BYTE CheckSum(BYTE *Data,BYTE len)
     5          {
     6   1          BYTE dwSum = 0;
-    7   1              BYTE i;
+    7   1          BYTE i;
     8   1          for (i = 0; i < len; i++)
     9   1          {
    10   2              dwSum += Data[i];
@@ -52,10 +52,10 @@ stmt  level    source
    42          
    43          
    44          void SendCmd(BYTE Cmd, BYTE *Data, BYTE Length)
-   45          {       
-   46   1              BYTE Sum;
+   45          {    
+   46   1          BYTE Sum;
    47   1          BYTE Str[3] = {0};
-   48   1              FRAME_HEAD *head;
+   48   1          FRAME_HEAD *head;
    49   1      
    50   1          memset(SendBuf, 0, UART_BUFF_LENGTH);
    51   1          head = (FRAME_HEAD*)SendBuf;
@@ -66,7 +66,7 @@ stmt  level    source
    56   1          head->Addr   = 0xA0;    
    57   1          head->Cmd    = Cmd;
    58   1      
-C251 COMPILER V5.60.0,  MwPro                                                              12/04/24  10:49:11  PAGE 2   
+C251 COMPILER V5.60.0,  MwPro                                                              07/05/24  18:43:57  PAGE 2   
 
    59   1          // data
    60   1          if (Length > 0)
@@ -96,10 +96,10 @@ stmt  level    source
    84          
    85          BOOL ValidUartFrame()
    86          {
-   87   1              BYTE cs;
+   87   1          BYTE cs;
    88   1          BYTE rs;
    89   1          FRAME_HEAD *pFrameHead;
-   90   1              if ((RecLength < (sizeof(FRAME_HEAD) + 3)) ||
+   90   1          if ((RecLength < (sizeof(FRAME_HEAD) + 3)) ||
    91   1            (RecLength >= 255))   // 长度大于最大包长 或 小于 帧头长度
    92   1          {
    93   2              return FALSE;
@@ -134,7 +134,7 @@ stmt  level    source
   122          
 
 
-C251 COMPILER V5.60.0,  MwPro                                                              12/04/24  10:49:11  PAGE 3   
+C251 COMPILER V5.60.0,  MwPro                                                              07/05/24  18:43:57  PAGE 3   
 
 Module Information          Static   Overlayable
 ------------------------------------------------

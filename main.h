@@ -28,7 +28,7 @@
 #define POWER_ON               0xAA
 #define POWER_OFF              0x55
 
-#define VERSION  "1.0.0"
+#define VERSION  "1.0.1"
 //#define DEV_FIXED         //固定式气溶胶
 #define DEV_OFFLINE_LOW     //离线低放
 

@@ -85,10 +85,11 @@ void Uart1Hnd()
     if (Rx1_Timer > 20)
     {
         Rx1_Timer = 0;
-        
+        //Error();
         memcpy(RecvBuf,RX1_Buffer, RX1_Cnt);
         RecLength = RX1_Cnt;
         HndUartData(); 
+        
         ClearUart1Buf();
     }
 }

@@ -53,32 +53,32 @@ WORD xdata FlashIoTimer[32] = {0};
 ========================================================================*/
 WORD WordToSmall(WORD dat)
 {
-	BYTE buf[2];
+    BYTE buf[2];
     BYTE t;
     WORD ret;
     
     memcpy(buf, &dat, 2);
-	t = buf[1];
-	buf[1] = buf[0];
-	buf[0] = t;
-	
+    t = buf[1];
+    buf[1] = buf[0];
+    buf[0] = t;
+    
     memcpy(&ret, buf, 2);
     return ret;
 }
 
 float FloatToSmall(float dat)
 {
-	BYTE buf[4];
+    BYTE buf[4];
     BYTE t;
     float ret;
     
     memcpy(buf, &dat, 4);
-	t = buf[3];
-	buf[3] = buf[0];
-	buf[0] = t;
-	t = buf[2];
-	buf[2] = buf[1];
-	buf[1] = t;
+    t = buf[3];
+    buf[3] = buf[0];
+    buf[0] = t;
+    t = buf[2];
+    buf[2] = buf[1];
+    buf[1] = t;
 
     memcpy(&ret, buf, 4);
     return ret;
@@ -86,17 +86,17 @@ float FloatToSmall(float dat)
 
 DWORD DwordToSmall(DWORD dat)
 {
-	BYTE buf[4];
+    BYTE buf[4];
     BYTE t;
     DWORD ret;
     
     memcpy(buf, &dat, 4);
-	t = buf[3];
-	buf[3] = buf[0];
-	buf[0] = t;
-	t = buf[2];
-	buf[2] = buf[1];
-	buf[1] = t;
+    t = buf[3];
+    buf[3] = buf[0];
+    buf[0] = t;
+    t = buf[2];
+    buf[2] = buf[1];
+    buf[1] = t;
 
     memcpy(&ret, buf, 4);
     return ret;
@@ -122,7 +122,7 @@ void Error()
 //    }
 //}
 
-void Delay(WORD ms)	//@11.0592MHz
+void Delay(WORD ms)    //@11.0592MHz
 {
     unsigned long edata i;
 
@@ -171,22 +171,23 @@ void Bump_ONOFF(BYTE x)
     BUMP(x);
 }
 
-BYTE Key_Scan(void)
+void Key_Scan(void)
 {
     static BYTE keyVal = 0;
     if(STOP_M() == 0)
     {
-        Delay(10);
+        Delay(15);
         if(STOP_M() == 0)
         {
-            keyVal = STOP_OK;
+            OutCtl(0, BIT_BUMP);
+            //keyVal = STOP_OK;
         }
     }
-    else
-    {
-        keyVal = 0;
-    }
-    return keyVal;
+//    else
+//    {
+//        keyVal = 0;
+//    }
+//    return keyVal;
 }
 
 void Output(BYTE i, BYTE x)
@@ -196,7 +197,7 @@ void Output(BYTE i, BYTE x)
         
         case BIT_HOST_POWER:    HOST_POWER(x);    break;    // 主电源控制
         case BIT_SYS_POWER:     SYS_POWER(x);     break;    // 工控机电源控制
-        case BIT_SEN_ONOFF:     SEN_POWER(x);     break;    // 探测器电源  
+        //case BIT_SEN_ONOFF:     SEN_POWER(x);     break;    // 探测器电源  
         case BIT_LED_RED:       LED_RED(x);       break;    // 指示灯(红)
         case BIT_LED_YELLOW:    LED_YELLOW(x);    break;    // 指示灯(黄)
         case BIT_LED_GREEN:     LED_GREEN(x);     break;    // 指示灯(绿)
@@ -374,6 +375,7 @@ void TimerTask(void)
         if (Task1s >= 1000)
         {
             Task1s = 0;
+            CLR_WDT = 1;  // 喂狗
             if (InputReport == FALSE)
             {
                 Task_1s();
@@ -505,17 +507,17 @@ void CtlPaper()
 
 void Out4_20ma(BYTE val)
 {
-    WORD v = (WORD)((float)val * 88.5);
-    v = WordToSmall(v);
-    MCP4725_OutVol(MCP4725_BL_ADDR, v);
+    WORD v = (WORD)((float)val *100);
+    //v = WordToSmall(v);
+    MCP4725_OutVol(MCP4725_aV_ADDR, v);
 }
 
 
 void Out4_20ma_2(BYTE val)
 {
-    WORD v = (WORD)((float)val * 88.5);
-    v = WordToSmall(v);
-    MCP4725_OutVol2(MCP4725_BL_ADDR, v);
+    WORD v = (WORD)((float)val * 100);
+    //v = WordToSmall(v);
+    MCP4725_OutVol2(MCP4725_HV_ADDR, v);
 }
 
 
@@ -525,6 +527,8 @@ BYTE Read4_20ma()
     BYTE ret = 0;
     int Voltage = 0;
     GetAds1110(I2C_4_20MA_IN);
+    
+    //GetAds1110(2);
 
     ret = (BYTE)((float)Voltage/60);
     SendCmd(CMD_GET_4_20MA, &ret, 1);
@@ -563,10 +567,10 @@ void HndUartFrame()
 void PowerOff()
 {
     RUN_LED(0);
-    HOST_POWER(0);
-    SYS_POWER(0);
-    SEN_POWER(0);
-    
+    //HOST_POWER(0);
+    //SYS_POWER(0);
+    //SEN_POWER(0);
+    IoInit();
     while(1)
     {
         ;
@@ -582,53 +586,130 @@ void PowerHnd(BYTE InVal)
     {
         if (in.IoBit.HostPwSt == 0)  // 工控已经关机
         {
-            OutVal(BIT_HOST_POWER, OFF);   // 关闭总电源
-            OutVal(BIT_SEN_ONOFF, OFF);   // IO板总电源
+            //Error(); 
             OutVal(BIT_SYS_POWER, OFF);   // 关闭工控机
+            OutVal(BIT_HOST_POWER, OFF);   // 关闭总电源
+            //OutVal(BIT_SEN_ONOFF, OFF);   // IO板总电源
+           
 
             PowerOff();
+            //ALARM_1(0);
         }
     }
 }
 
-
+//BYTE GetInput()
+//{
+//    // 当前只有一个开关机状态 P5.0
+//    static BYTE his = LOCK_BIT();
+//    BYTE st = ONOFF_LOCK();
+//
+//    if (st != his)
+//    {
+//        Delay(50);
+//        if ( st == ONOFF_LOCK() )
+//        {
+//            his = st;
+//            return st;
+//        }
+//    }
+//    return 0xFF;
+//}
 
 BYTE GetInput()
 {
-    // 当前只有一个开关机状态 P5.0  
+    // 当前只有一个开关机状态 P5.0
+  
     BYTE ret;
     
-
     ret = P1 & 0x0B;
     ret <<= 4;
     ret |= (P4 & 0x02);
     ret |= (P5 & 0x01);
+
     return ret;
 }
 
 
 
+//void HndInput()
+//{
+//    static BYTE  PwrHis = POWER_ON;   
+//    static BYTE  StHis = 0x00;
+//    BYTE key = 0;
+//    BYTE s;
+//
+//    key = Key_Scan();
+//    switch(key)
+//    {
+//        case STOP_OK:  
+//        {
+//            //OutVal(BIT_BUMP,OFF);  
+//            OutCtl(0, BIT_BUMP);
+//            break;
+//        }
+//        case ALARMCFM_OK:  
+//        {
+//            g_Key_Confrom = 1; 
+//            //OutVal(BIT_ALARM_SOUND,OFF);  
+//            OutCtl(0, BIT_ALARM_SOUND);
+//            break;
+//        }
+//    }
+//    
+//    Input_Status = GetInput();
+//    if (Input_Status != 0xFF)
+//    {
+//        //DebugMsg("Power Lock status \r\n");
+//        s = (Input_Status ^ StHis);
+//        if (s & LOCK_BIT())   // 开关机锁
+//        {
+//            if (Input_Status & LOCK_BIT())
+//            {
+//                // 高电平关机
+//                PwrHis = POWER_OFF;
+//                //DebugMsg("Power Off \r\n");
+//                
+//                InputReport = 1;
+//            }
+//            else
+//            {
+//                // 低电平开机
+//                //DebugMsg("Power On \r\n");
+//                //PW_MAIN(1);
+//                PwrHis = POWER_ON;
+//                RunTime = 0;
+//            }
+//        }
+//        StHis = Input_Status;
+//    }
+//
+//
+//    // 延时关机
+//    if (PwrHis == POWER_OFF)
+//    {
+//        if ((PC_STAUTUS() == 0) && (RunTime >= 5000))
+//        {
+//            RunTime = 0;
+//            //DebugMsg("Power Down \r\n");
+//            PowerOff();
+//        }
+//    }
+//}
+
+
 void HndInput()
 {
     #define IO_MASK 0x33  
-    BYTE key = 0;
-    BYTE InCur;
+
     static BYTE InHis = 0;
     static BYTE RpHis = 0;
-    key = Key_Scan();
-    switch(key)
-    {
-        case STOP_OK:  
-        {
-            //OutVal(BIT_BUMP,OFF);  
-            OutCtl(0, BIT_BUMP);
-            break;
-        }
-    }
+    BYTE InCur;
     
-    InCur = GetInput();
+    Key_Scan();
+    
+    InCur= GetInput();
     PowerHnd(InCur);
-    
     if (InHis != InCur)
     {
         Delay(20);
@@ -651,6 +732,63 @@ void HndInput()
     }
 }
 
+/*
+void HndPaper()
+{
+    static BYTE IrHis = 0; 
+    BYTE ir;
+    //BYTE ret = 1;
+    
+    if (Paper.OnOff)
+    {
+        ir = PAPER_IR();
+        if (IrHis != ir)
+        {
+            IrHis = ir;
+            PaperPluse ++;
+            PaperTimer = 0;
+        }
+        
+        if ((PaperPluse >= Paper.Pluse) || (PaperTimer > 500))
+        {
+            OutCtl(0,    BIT_ZHOU_ZHI);
+            Paper.OnOff = 0;
+        }
+
+        if (PaperTimer > 500)
+        {   
+            // 走纸失败
+            PaperErr = TRUE;
+            //SendCmd(CMD_CTL_PAPER, (BYTE *)&ret, 1);
+        }
+    }
+}
+*/
+
+//void ReportInput()
+//{
+//    BYTE ret = 1;
+//    BYTE PwOff = POWER_OFF;
+//    
+//    // 通信空闲的时候才上报，不然会冲突
+//    if (CommIdleTime > 200)
+//    {
+//        if (InputReport)
+//        {
+//            InputReport = FALSE;
+//            SendCmd(CMD_IO_IN, (BYTE *)&PwOff, 1);
+//            return;
+//        }
+//
+//        if (g_Key_Confrom)
+//        {
+//            g_Key_Confrom = 0;
+//            SendCmd(CMD_SOUND, NULL, 0);
+//            return;
+//        }
+//    }
+//}
+
 void ReportInput()
 {
     BYTE ret = 1;
@@ -658,12 +796,21 @@ void ReportInput()
     // 通信空闲的时候才上报，不然会冲突
     if (CommIdleTime > 200)
     {
+        
         if (InputReport)
         {
+            //Error();
             InputReport = FALSE;
             SendCmd(CMD_IO_IN, (BYTE *)&InputStatus, 1);
             return;
         }
+
+//        if (g_Key_Confrom)
+//        {
+//            g_Key_Confrom = 0;
+//            SendCmd(CMD_SOUND, NULL, 0);
+//            return;
+//        }
     }
 }
 
@@ -694,7 +841,7 @@ int main( void )
     LedInit(); 
     RUN_LED(1);
     
-    OutVal(BIT_SEN_ONOFF, ON);      // 上电打开IO板总电源
+    //OutVal(BIT_SEN_ONOFF, ON);      // 上电打开IO板总电源
     OutVal(BIT_SYS_POWER, ON);      // 上电打开工控机
 
     Delay(200);
@@ -705,7 +852,7 @@ int main( void )
 
     Delay(200);
     Out4_20ma(0);
-    
+    Out4_20ma_2(0);
     OutCtl(1, BIT_LED_GREEN);   // 上电开启运行灯
     
     RUN_LED(0);
@@ -714,7 +861,7 @@ int main( void )
 
     WDT_CONTR |= (1<<5) |  7;  // 启动开门狗，约8秒
     while(1)
-    {         
+    {        
         TimerTask();
         HndInput();
         Uart1Hnd();

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  Uart                                                               12/04/24  10:49:11  PAGE 1   
+C251 COMPILER V5.60.0,  Uart                                                               07/05/24  18:43:57  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE Uart
@@ -66,7 +66,7 @@ stmt  level    source
    56   2              Rx1_Timer = 0;
    57   2              RX1_Buffer[RX1_Cnt] = SBUF;
    58   2              
-C251 COMPILER V5.60.0,  Uart                                                               12/04/24  10:49:11  PAGE 2   
+C251 COMPILER V5.60.0,  Uart                                                               07/05/24  18:43:57  PAGE 2   
 
    59   2              if(++RX1_Cnt >= MAX_LENGTH)   
    60   2              {
@@ -97,33 +97,34 @@ stmt  level    source
    85   1          if (Rx1_Timer > 20)
    86   1          {
    87   2              Rx1_Timer = 0;
-   88   2              
+   88   2              //Error();
    89   2              memcpy(RecvBuf,RX1_Buffer, RX1_Cnt);
    90   2              RecLength = RX1_Cnt;
    91   2              HndUartData(); 
-   92   2              ClearUart1Buf();
-   93   2          }
-   94   1      }
-   95          
+   92   2              
+   93   2              ClearUart1Buf();
+   94   2          }
+   95   1      }
    96          
-   97          //重定向Printf
-   98          char putchar(char c )
-   99          {
-  100   1          SBUF = c;
-  101   1          while(!TI);
-  102   1          TI = 0;
-  103   1          return c;
-  104   1      }
-  105          
-  106          void ClearUart1Buf()
-  107          {
-  108   1          memset(RX1_Buffer,0,MAX_LENGTH);
-  109   1          RX1_Cnt = 0;
-  110   1      }
-  111          
+   97          
+   98          //重定向Printf
+   99          char putchar(char c )
+  100          {
+  101   1          SBUF = c;
+  102   1          while(!TI);
+  103   1          TI = 0;
+  104   1          return c;
+  105   1      }
+  106          
+  107          void ClearUart1Buf()
+  108          {
+  109   1          memset(RX1_Buffer,0,MAX_LENGTH);
+  110   1          RX1_Cnt = 0;
+  111   1      }
   112          
   113          
   114          
+  115          
 
 
 Module Information          Static   Overlayable
@@ -134,9 +135,9 @@ Module Information          Static   Overlayable
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =       128     ------
-  xdata-const size     =    ------     ------
-C251 COMPILER V5.60.0,  Uart                                                               12/04/24  10:49:11  PAGE 3   
+C251 COMPILER V5.60.0,  Uart                                                               07/05/24  18:43:57  PAGE 3   
 
+  xdata-const size     =    ------     ------
   edata size           =         4     ------
   bit size             =         1     ------
   ebit size            =    ------     ------

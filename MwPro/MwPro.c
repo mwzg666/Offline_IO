@@ -4,7 +4,7 @@
 BYTE CheckSum(BYTE *Data,BYTE len)
 {
     BYTE dwSum = 0;
-	BYTE i;
+    BYTE i;
     for (i = 0; i < len; i++)
     {
         dwSum += Data[i];
@@ -42,10 +42,10 @@ BYTE BcdToHex(BYTE Bh, BYTE Bl)
 
 
 void SendCmd(BYTE Cmd, BYTE *Data, BYTE Length)
-{	
-	BYTE Sum;
+{    
+    BYTE Sum;
     BYTE Str[3] = {0};
-	FRAME_HEAD *head;
+    FRAME_HEAD *head;
 
     memset(SendBuf, 0, UART_BUFF_LENGTH);
     head = (FRAME_HEAD*)SendBuf;
@@ -84,10 +84,10 @@ void SendCmd(BYTE Cmd, BYTE *Data, BYTE Length)
 
 BOOL ValidUartFrame()
 {
-	BYTE cs;
+    BYTE cs;
     BYTE rs;
     FRAME_HEAD *pFrameHead;
-	if ((RecLength < (sizeof(FRAME_HEAD) + 3)) ||
+    if ((RecLength < (sizeof(FRAME_HEAD) + 3)) ||
       (RecLength >= 255))   // 长度大于最大包长 或 小于 帧头长度
     {
         return FALSE;
